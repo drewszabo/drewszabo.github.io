@@ -6,8 +6,10 @@
     <title>Drew Szabo | Homepage</title>
     <style>
         body {
-            background-color: black;
-            color: yellow;
+            background: url('background.jpg') repeat;
+            background-position: center;
+            background-color: black; /* Fallback for areas without the image */
+            color: rgb(224, 224, 15);
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -20,11 +22,11 @@
             width: 200px;
             background-color: black;
             padding: 10px;
-            border-right: 2px solid yellow;
+            border-right: 2px solid rgb(224, 224, 15);
         }
         #sidebar a {
             display: block;
-            color: yellow;
+            color: rgb(224, 224, 15);
             text-decoration: none;
             margin: 10px 0;
             font-weight: bold;
@@ -38,13 +40,13 @@
             overflow-y: auto;
         }
         h1, h2 {
-            color: yellow;
+            color: rgb(224, 224, 15);
         }
         /* WordArt-inspired 3D text */
         #wordart {
             font-size: 4em;
             font-weight: bold;
-            color: yellow;
+            color: rgb(224, 224, 15);
             text-transform: uppercase;
             text-align: center;
             text-shadow: 
@@ -68,13 +70,18 @@
             <a href="#cv">CV</a>
             <a href="#publications">Publications</a>
             <a href="#contact">Contact</a>
+            <h1>Links</h1>
+            <a href="https://www.linkedin.com/in/drew-szabo/" target="_blank">LinkedIn</a>
+            <a href="https://github.com/drewszabo" target="_blank">GitHub</a>
+            <a href="https://scholar.google.com/citations?user=jmwwChYAAAAJ&hl=en" target="_blank">Google Scholar</a>
+            <a href="https://orcid.org/0000-0002-0089-9218" target="_blank">ORCID</a>
         </div>
         <div id="content">
-            <!-- WordArt-inspired heading -->
             <div id="wordart">Drew's Homepage</div>
             <section id="about">
                 <h2>About Me</h2>
-                <p>Welcome to my Web 1.0 styled site! I am an analytical chemist working on emerging contaminants using high-resolution mass spectrometry.</p>
+                <p>Hi, I’m Drew! I am a postdoctoral researcher specializing in analytical chemistry, with a focus on using high-resolution mass spectrometry (HRMS) to study emerging contaminants. My expertise lies in suspect and non-targeted screening of small molecules in complex environmental samples such as water, sediment, and soil.</p>
+                <p>Originally from Australia, I am currently working and living in Europe, where I am passionate about advancing our understanding of environmental pollution and its impact on ecosystems and human health. Through my research, I aim to develop innovative analytical workflows that push the boundaries of what is possible in chemical analysis, bridging the gap between environmental science and cutting-edge technology.</p>
             </section>
             <section id="cv">
                 <h2>CV</h2>
@@ -86,7 +93,7 @@
             </section>
             <section id="contact">
                 <h2>Contact</h2>
-                <p>Email: drew.szabo@york.ac.uk</p>
+                <p>Email: <a href="mailto:drew.szabo@york.ac.uk">drew.szabo@york.ac.uk</a></p>
             </section>
         </div>
     </div>
