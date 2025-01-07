@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Web 1.0 Website</title>
+    <title>Drew Szabo | Homepage</title>
     <style>
         body {
             background-color: black;
@@ -35,9 +35,28 @@
         #content {
             flex-grow: 1;
             padding: 20px;
+            overflow-y: auto;
         }
-        h1 {
+        h1, h2 {
             color: yellow;
+        }
+        /* WordArt-inspired 3D text */
+        #wordart {
+            font-size: 4em;
+            font-weight: bold;
+            color: yellow;
+            text-transform: uppercase;
+            text-align: center;
+            text-shadow: 
+                1px 1px 0 #ff0000, 
+                2px 2px 0 #ff0000, 
+                3px 3px 0 #0000ff, 
+                4px 4px 0 #0000ff, 
+                5px 5px 0 #008000, 
+                6px 6px 0 #008000, 
+                7px 7px 0 #ffff00, 
+                8px 8px 0 #ffff00;
+            margin: 20px 0;
         }
     </style>
 </head>
@@ -51,6 +70,8 @@
             <a href="#contact">Contact</a>
         </div>
         <div id="content">
+            <!-- WordArt-inspired heading -->
+            <div id="wordart">Drew's Homepage</div>
             <section id="about">
                 <h2>About Me</h2>
                 <p>Welcome to my Web 1.0 styled site! I am an analytical chemist working on emerging contaminants using high-resolution mass spectrometry.</p>
@@ -65,7 +86,7 @@
             </section>
             <section id="contact">
                 <h2>Contact</h2>
-                <p>Email: your-email@example.com</p>
+                <p>Email: drew.szabo@york.ac.uk</p>
             </section>
         </div>
     </div>
