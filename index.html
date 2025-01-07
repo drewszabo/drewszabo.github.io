@@ -1,1 +1,73 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Web 1.0 Website</title>
+    <style>
+        body {
+            background-color: black;
+            color: yellow;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #container {
+            display: flex;
+            height: 100vh;
+        }
+        #sidebar {
+            width: 200px;
+            background-color: black;
+            padding: 10px;
+            border-right: 2px solid yellow;
+        }
+        #sidebar a {
+            display: block;
+            color: yellow;
+            text-decoration: none;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #sidebar a:hover {
+            text-decoration: underline;
+        }
+        #content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        h1 {
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="sidebar">
+            <h1>Menu</h1>
+            <a href="#about">About Me</a>
+            <a href="#cv">CV</a>
+            <a href="#publications">Publications</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div id="content">
+            <section id="about">
+                <h2>About Me</h2>
+                <p>Welcome to my Web 1.0 styled site! I am an analytical chemist working on emerging contaminants using high-resolution mass spectrometry.</p>
+            </section>
+            <section id="cv">
+                <h2>CV</h2>
+                <p>Check back soon for my CV. It'll be linked here in PDF format!</p>
+            </section>
+            <section id="publications">
+                <h2>Publications</h2>
+                <p>Here you'll find a list of my publications. I'm working on making this section comprehensive and up-to-date.</p>
+            </section>
+            <section id="contact">
+                <h2>Contact</h2>
+                <p>Email: your-email@example.com</p>
+            </section>
+        </div>
+    </div>
+</body>
+</html>
