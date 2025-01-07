@@ -6,7 +6,7 @@
     <title>Drew Szabo | Homepage</title>
     <style>
         body {
-            background: url('background.jpg') repeat;
+            background: url('assets/background.jpg') repeat;
             background-position: center;
             background-color: black; /* Fallback for areas without the image */
             color: rgb(224, 224, 15);
@@ -84,6 +84,12 @@
         height: auto; /* Maintains the aspect ratio */
         }
 
+        #publications a {
+        text-decoration: none; /* Removes underline */
+        font-weight: bold; /* Optional: Makes it stand out */
+        animation: rainbow 3s infinite; /* Applies the animation */
+        }
+
         @keyframes rainbow {
         0% { color: red; }
         14% { color: orange; }
@@ -103,8 +109,8 @@
     </style>
 </head>
 <body>
-    <audio autoplay loop>
-        <source src="linkin_park-numb.mid" type="audio/midi">
+    <audio controls autoplay>
+        <source src="assets/linkin_park-numb.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
     <div id="container">
@@ -116,7 +122,7 @@
             <a href="#publications">Publications</a>
             <a href="#conferences">Conferences</a>
             <a href="#contact">Contact</a>
-            <h1>Links</h1>
+            <img src="https://web.archive.org/web/20091027040041/http://geocities.com/dmorriscat/links_md_clr.gif">
             <a href="https://www.linkedin.com/in/drew-szabo/" target="_blank">LinkedIn</a>
             <a href="https://github.com/drewszabo" target="_blank">GitHub</a>
             <a href="https://scholar.google.com/citations?user=jmwwChYAAAAJ&hl=en" target="_blank">Google Scholar</a>
@@ -124,8 +130,8 @@
             <h6>&#169 Drew Szabo 2025</h6>
         </div>
         <div id="content">
-            <div style="text-align: center; width: 600; height: 10; overflow: hidden;">
-                <img src="header.gif" style="width: auto; height: 10%;">
+            <div style="text-align: center;">
+                <img src="assets/header.gif">
             </div>
             <section id="header">
                 <img src="https://web.archive.org/web/20091027022039/http://geocities.com/chemistry_lessons_135/index_files/image002.gif" alt="Left Icon">
