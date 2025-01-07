@@ -60,6 +60,65 @@
                 8px 8px 0 #ffff00;
             margin: 20px 0;
         }
+
+        #header {
+        display: flex;
+        align-items: center; /* Vertically aligns items */
+        justify-content: space-between; /* Places images on either side and text in the center */
+        text-align: center; /* Centers text within its container */
+        padding: 10px; /* Adds some spacing around the content */
+        }
+
+        #header img {
+        width: 50px; /* Adjust image size as needed */
+        height: auto; /* Maintains aspect ratio */
+        }
+
+        #header h2, #header h3 {
+        margin: 5px 0; /* Adds spacing between lines */
+        }
+
+        #header div {
+        flex: 1; /* Allows the text block to take up the remaining space */
+        margin: 0 20px; /* Adds space between the images and text */
+        }
+
+        #publications {
+        display: flex; /* Makes the container a flexbox */
+        align-items: center; /* Vertically aligns the heading and image */
+        gap: 10px; /* Adds space between the heading and image */
+        }
+
+        #publications h2 {
+        margin-right: 10px; /* Adds some spacing between the text and the image */
+        }
+
+        #publications p {
+        margin-top: 10px; /* Adds space above the paragraph */
+        clear: both; /* Ensures the paragraph starts on a new line */
+        }
+
+        #publications img {
+        width: 30px; /* Adjust size as needed */
+        height: auto; /* Maintains the aspect ratio */
+        }
+
+        @keyframes rainbow {
+        0% { color: red; }
+        14% { color: orange; }
+        28% { color: yellow; }
+        42% { color: green; }
+        57% { color: blue; }
+        71% { color: indigo; }
+        85% { color: violet; }
+        100% { color: red; }
+        }
+
+        #contact a {
+        text-decoration: none; /* Removes underline */
+        font-weight: bold; /* Optional: Makes it stand out */
+        animation: rainbow 3s infinite; /* Applies the animation */
+        }
     </style>
 </head>
 <body>
@@ -67,7 +126,7 @@
         <div id="sidebar">
             <h1>Menu</h1>
             <a href="#about">About Me</a>
-            <a href="#cv">CV</a>
+            <a href="#projects">Projects</a>
             <a href="#publications">Publications</a>
             <a href="#contact">Contact</a>
             <h1>Links</h1>
@@ -75,25 +134,46 @@
             <a href="https://github.com/drewszabo" target="_blank">GitHub</a>
             <a href="https://scholar.google.com/citations?user=jmwwChYAAAAJ&hl=en" target="_blank">Google Scholar</a>
             <a href="https://orcid.org/0000-0002-0089-9218" target="_blank">ORCID</a>
+            <h6>&#169 Drew Szabo 2025</h6>
         </div>
         <div id="content">
             <div id="wordart">Drew's Homepage</div>
+            <section id="header">
+                <img src="https://web.archive.org/web/20091027022039/http://geocities.com/chemistry_lessons_135/index_files/image002.gif" alt="Left Icon">
+                <div>
+                    <h2>Drew Szabo, PhD | Postdoctoral Fellow</h2>
+                    <h3>Centre of Excellence in Mass Spectrometry (CoEMS), Department of Chemistry, University of York</h3>
+                </div>
+                <img src="https://web.archive.org/web/20091022021450/http://www.geocities.com/mr_williams_chemistry/oopsBgWHT.gif" alt="Right Icon">
+            </section>
             <section id="about">
                 <h2>About Me</h2>
                 <p>Hi, I’m Drew! I am a postdoctoral researcher specializing in analytical chemistry, with a focus on using high-resolution mass spectrometry (HRMS) to study emerging contaminants. My expertise lies in suspect and non-targeted screening of small molecules in complex environmental samples such as water, sediment, and soil.</p>
                 <p>Originally from Australia, I am currently working and living in Europe, where I am passionate about advancing our understanding of environmental pollution and its impact on ecosystems and human health. Through my research, I aim to develop innovative analytical workflows that push the boundaries of what is possible in chemical analysis, bridging the gap between environmental science and cutting-edge technology.</p>
+                <img width="auto" src="https://web.archive.org/web/20091026192650/http://geocities.com/bonetnh99/pictures/firebar.gif">
             </section>
-            <section id="cv">
-                <h2>CV</h2>
-                <p>Check back soon for my CV. It'll be linked here in PDF format!</p>
+            <section id="projects">
+                <h2>Projects</h2>
+                <img src="https://web.archive.org/web/20090829144150/http://geocities.com/Athens/Acropolis/7401/science/afrink.gif" 
+                     alt="Project Image" style="float: right; margin: 0 0 10px 10px;">
+                <h3>Marie Skłodowska-Curie Postdoctoral Fellowship - UKRI Guarantee</h3>
+                <p>My current project aims to improve the prioritisation of high-resolution mass spectrometry features in non-targeted screening workflows.
+                    Prioritisation will be achieved by predicting the bioconcentration factor from structural and molecular fingerprints.
+                    The model will be trained using existing BCF and fragmentation data freely available from sources such as USEPA and MassBank.
+                </p>
             </section>
             <section id="publications">
-                <h2>Publications</h2>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <h2>Publications</h2>
+                    <img src="https://web.archive.org/web/20070423080733/http://hk.geocities.com/fatherofchemistry/new.gif" alt="New Icon">
+                </div>
                 <p>Here you'll find a list of my publications. I'm working on making this section comprehensive and up-to-date.</p>
+                <p>Here is a new line</p>
             </section>
-            <section id="contact">
+            <section id="contact" style="text-align: center;">
                 <h2>Contact</h2>
-                <p>Email: <a href="mailto:drew.szabo@york.ac.uk">drew.szabo@york.ac.uk</a></p>
+                <img src="https://web.archive.org/web/20091027033120/http://es.geocities.com/inmomateos/e-mail.gif" alt="Email Icon">
+                <p><a href="mailto:drew.szabo@york.ac.uk">drew.szabo@york.ac.uk</a></p>
             </section>
         </div>
     </div>
