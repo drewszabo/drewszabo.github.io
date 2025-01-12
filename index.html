@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,8 @@
         body {
             background: url('assets/background.jpg') repeat;
             background-position: center;
-            background-color: black; /* Fallback for areas without the image */
+            background-color: black;
+            /* Fallback for areas without the image */
             color: rgb(224, 224, 15);
             font-family: Arial, sans-serif;
             margin: 0;
@@ -16,29 +18,39 @@
         }
 
         .metal-frame {
-            display: inline-block; /* Keeps the frame tightly around the image */
-            padding: 5px; /* Space for the frame */
-            background: linear-gradient(45deg, #dcdcdc, #f5f5f5, #a9a9a9); /* Metallic gradient */
-            border: 3px solid #a9a9a9; /* Optional outer edge */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); /* Frame shadow */
+            display: inline-block;
+            /* Keeps the frame tightly around the image */
+            padding: 5px;
+            /* Space for the frame */
+            background: linear-gradient(45deg, #dcdcdc, #f5f5f5, #a9a9a9);
+            /* Metallic gradient */
+            border: 3px solid #a9a9a9;
+            /* Optional outer edge */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            /* Frame shadow */
         }
 
         .metal-frame img {
-            display: block; /* Prevents image spacing issues */
-            border: none; /* Removes default border around images */
-            max-width: 100%; /* Keeps the image responsive */
+            display: block;
+            /* Prevents image spacing issues */
+            border: none;
+            /* Removes default border around images */
+            max-width: 100%;
+            /* Keeps the image responsive */
         }
 
         #container {
             display: flex;
             height: 100vh;
         }
+
         #sidebar {
             width: 300px;
             background-color: black;
             padding: 10px;
             border-right: 2px solid rgb(224, 224, 15);
         }
+
         #sidebar a {
             display: block;
             color: rgb(224, 224, 15);
@@ -46,85 +58,136 @@
             margin: 10px 0;
             font-weight: bold;
         }
+
         #sidebar a:hover {
             text-decoration: underline;
         }
+
         #content {
             flex-grow: 1;
             padding: 20px;
             overflow-y: auto;
         }
-        h1, h2 {
+
+        h1,
+        h2 {
             color: rgb(224, 224, 15);
         }
 
         #header {
-        display: flex;
-        align-items: center; /* Vertically aligns items */
-        justify-content: space-between; /* Places images on either side and text in the center */
-        text-align: center; /* Centers text within its container */
-        padding: 10px; /* Adds some spacing around the content */
+            display: flex;
+            align-items: center;
+            /* Vertically aligns items */
+            justify-content: space-between;
+            /* Places images on either side and text in the center */
+            text-align: center;
+            /* Centers text within its container */
+            padding: 10px;
+            /* Adds some spacing around the content */
         }
 
         #header img {
-        width: 50px; /* Adjust image size as needed */
-        height: auto; /* Maintains aspect ratio */
+            width: 50px;
+            /* Adjust image size as needed */
+            height: auto;
+            /* Maintains aspect ratio */
         }
 
-        #header h2, #header h3 {
-        margin: 5px 0; /* Adds spacing between lines */
+        #header h2,
+        #header h3 {
+            margin: 5px 0;
+            /* Adds spacing between lines */
         }
 
         #header div {
-        flex: 1; /* Allows the text block to take up the remaining space */
-        margin: 0 20px; /* Adds space between the images and text */
+            flex: 1;
+            /* Allows the text block to take up the remaining space */
+            margin: 0 20px;
+            /* Adds space between the images and text */
         }
 
         #publications {
-        align-items: center; /* Vertically aligns the heading and image */
-        gap: 10px; /* Adds space between the heading and image */
+            align-items: center;
+            /* Vertically aligns the heading and image */
+            gap: 10px;
+            /* Adds space between the heading and image */
         }
 
         #publications h2 {
-        margin-right: 10px; /* Adds some spacing between the text and the image */
+            margin-right: 10px;
+            /* Adds some spacing between the text and the image */
         }
 
         #publications p {
-        margin-top: 10px; /* Adds space above the paragraph */
-        clear: both; /* Ensures the paragraph starts on a new line */
+            margin-top: 10px;
+            /* Adds space above the paragraph */
+            clear: both;
+            /* Ensures the paragraph starts on a new line */
         }
 
         #publications img {
-        width: 30px; /* Adjust size as needed */
-        height: auto; /* Maintains the aspect ratio */
+            width: 30px;
+            /* Adjust size as needed */
+            height: auto;
+            /* Maintains the aspect ratio */
         }
 
         #publications a {
-        text-decoration: none; /* Removes underline */
-        font-weight: bold; /* Optional: Makes it stand out */
-        animation: rainbow 3s infinite; /* Applies the animation */
+            text-decoration: none;
+            /* Removes underline */
+            font-weight: bold;
+            /* Optional: Makes it stand out */
+            animation: rainbow 3s infinite;
+            /* Applies the animation */
         }
 
         @keyframes rainbow {
-        0% { color: red; }
-        14% { color: orange; }
-        28% { color: yellow; }
-        42% { color: green; }
-        57% { color: blue; }
-        71% { color: indigo; }
-        85% { color: violet; }
-        100% { color: red; }
+            0% {
+                color: red;
+            }
+
+            14% {
+                color: orange;
+            }
+
+            28% {
+                color: yellow;
+            }
+
+            42% {
+                color: green;
+            }
+
+            57% {
+                color: blue;
+            }
+
+            71% {
+                color: indigo;
+            }
+
+            85% {
+                color: violet;
+            }
+
+            100% {
+                color: red;
+            }
         }
 
         #contact a {
-        text-decoration: none; /* Removes underline */
-        font-weight: bold; /* Optional: Makes it stand out */
-        animation: rainbow 3s infinite; /* Applies the animation */
+            text-decoration: none;
+            /* Removes underline */
+            font-weight: bold;
+            /* Optional: Makes it stand out */
+            animation: rainbow 3s infinite;
+            /* Applies the animation */
         }
     </style>
 </head>
+
 <body>
-    <audio controls autoplay>
+    <audio controls>
         <source src="assets/linkin_park-numb.mp3" type="audio/mp3">
         Your browser does not support the audio element.
     </audio>
@@ -143,61 +206,182 @@
             <a href="https://scholar.google.com/citations?user=jmwwChYAAAAJ&hl=en" target="_blank">Google Scholar</a>
             <a href="https://orcid.org/0000-0002-0089-9218" target="_blank">ORCID</a>
             <h6>&#169 Drew Szabo 2025</h6>
-            <img src="https://hitwebcounter.com/counter/counter.php?page=18315639&style=0025&nbdigits=4&type=page&initCount=0" border="0" />
+            <img src="https://hitwebcounter.com/counter/counter.php?page=18315639&style=0025&nbdigits=4&type=page&initCount=0"
+                border="0" />
         </div>
         <div id="content">
             <div style="text-align: center;">
                 <img src="assets/header.gif">
             </div>
             <section id="header">
-                <img src="https://web.archive.org/web/20091027022039/http://geocities.com/chemistry_lessons_135/index_files/image002.gif" alt="Left Icon">
+                <img src="https://web.archive.org/web/20091027022039/http://geocities.com/chemistry_lessons_135/index_files/image002.gif"
+                    alt="Left Icon">
                 <div>
                     <h2>Drew Szabo, PhD | Postdoctoral Fellow</h2>
-                    <h3>Centre of Excellence in Mass Spectrometry (CoEMS), Department of Chemistry, University of York</h3>
+                    <h3>Centre of Excellence in Mass Spectrometry (CoEMS), Department of Chemistry, University of York
+                    </h3>
                 </div>
-                <img src="https://web.archive.org/web/20091022021450/http://www.geocities.com/mr_williams_chemistry/oopsBgWHT.gif" alt="Right Icon">
+                <img src="https://web.archive.org/web/20091022021450/http://www.geocities.com/mr_williams_chemistry/oopsBgWHT.gif"
+                    alt="Right Icon">
             </section>
             <section id="about">
                 <h2>About Me</h2>
                 <div style="text-align: center;" class="metal-frame">
                     <img src="assets/me.jpg" alt="Drew Szabo" style="width: 100%; max-width: 300px; height: auto;">
                 </div>
-                <p>Hi, I’m Drew! I am a postdoctoral researcher specializing in analytical chemistry, with a focus on using high-resolution mass spectrometry (HRMS) to study emerging contaminants. My expertise lies in suspect and non-targeted screening of small molecules in complex environmental samples such as water, sediment, and soil.</p>
-                <p>Originally from Australia, I am currently working and living in Europe, where I am passionate about advancing our understanding of environmental pollution and its impact on ecosystems and human health. Through my research, I aim to develop innovative analytical workflows that push the boundaries of what is possible in chemical analysis, bridging the gap between environmental science and cutting-edge technology.</p>
-                <img src="https://web.archive.org/web/20060524124636/http://uk.geocities.com:80/paul.buglass2005@btinternet.com/yas_pages/yas_gifs/colorbar.gif" style="width: 100%; height: auto;">
+                <p>Hi, I’m Drew! I am a postdoctoral researcher specializing in analytical chemistry, with a focus on
+                    using high-resolution mass spectrometry (HRMS) to study emerging contaminants. My expertise lies in
+                    suspect and non-targeted screening of small molecules in complex environmental samples such as
+                    water, sediment, and soil.</p>
+                <p>Originally from Australia, I am currently working and living in Europe, where I am passionate about
+                    advancing our understanding of environmental pollution and its impact on ecosystems and human
+                    health. Through my research, I aim to develop innovative analytical workflows that push the
+                    boundaries of what is possible in chemical analysis, bridging the gap between environmental science
+                    and cutting-edge technology.</p>
+                <img src="https://web.archive.org/web/20060524124636/http://uk.geocities.com:80/paul.buglass2005@btinternet.com/yas_pages/yas_gifs/colorbar.gif"
+                    style="width: 100%; height: auto;">
             </section>
             <section id="projects">
                 <h2>Projects</h2>
-                <img src="https://web.archive.org/web/20090829144150/http://geocities.com/Athens/Acropolis/7401/science/afrink.gif" 
-                     alt="Project Image" style="float: right; margin: 0 0 10px 10px;">
-                <h3>Marie Skłodowska-Curie Postdoctoral Fellowship (UKRI Guarantee) - University of York</h3>
-                <p>My current project aims to improve the prioritisation of high-resolution mass spectrometry features in non-targeted screening workflows.
-                    Prioritisation will be achieved by predicting the bioconcentration factor from structural and molecular fingerprints.
-                    The model will be trained using existing BCF and fragmentation data freely available from sources such as USEPA and MassBank.
+                <img src="https://web.archive.org/web/20090829144150/http://geocities.com/Athens/Acropolis/7401/science/afrink.gif"
+                    alt="Project Image" style="float: right; margin: 0 0 10px 10px;">
+                <h3>Prediction of bioaccumulation factor from high-resolution mass spectrometry data using machine
+                    learning</h3>
+                <h4>Marie Skłodowska-Curie Postdoctoral Fellowship (UKRI Guarantee) - University of York</h4>
+                <p>This project combines cutting-edge high-resolution mass spectrometry (HRMS) technology with advanced
+                    machine learning algorithms to create a model for the prediction of bioaccumulation factors (BCF) for chemicals
+                    detected in environmental matrices. Tens of thousands of known and unknown chemicals can be measured in a
+                    single surface water sample, making it difficult to evaluate the chemical risk efficiently with existing quantitative
+                    structure-activity relationship (QSAR) -based prioritisation methodologies. Recent evidence has shown that
+                    structural information is encoded in the mass spectrum of a chemical, allowing us to leapfrog current processes by
+                    eliminating the requirement for structural identification. The model will be able to accurately
+                    predict the bioaccumulation factor from environmental samples measured with HRMS instruments, allowing
+                    researchers to more efficiently prioritise chemicals selected for in-vivo experiments and reducing animal testing.
                 </p>
+                <h3>Assessing and Managing the Impacts of Mixtures of Chemicals on UK Freshwater Biodiversity in a
+                    Changing World</h3>
+                <h4>Consultant - University of York</h4>
+                <p>Freshwater biodiversity is declining rapidly, with one in ten freshwater species in England threatened with extinction. Chemical pollution from wastewater, agriculture, urban areas, and mining significantly impacts water quality. Current assessments fail to reflect real impacts due to limited chemical focus, single-compound approaches, and lack of consideration for combined effects and ecological variability. To halt biodiversity loss in UK rivers, more effective methods for assessing and managing chemical impacts are urgently needed.
+                    <a href="https://gtr.ukri.org/projects?ref=NE%2FX015637%2F1"
+                        target="_blank">NERC</a>
+                </p>
+                <img src="https://web.archive.org/web/20060524124636/http://uk.geocities.com:80/paul.buglass2005@btinternet.com/yas_pages/yas_gifs/colorbar.gif"
+                style="width: 100%; height: auto;">
             </section>
             <section id="publications">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <h2>Publications</h2>
-                    <img src="https://web.archive.org/web/20070423080733/http://hk.geocities.com/fatherofchemistry/new.gif" alt="New Icon">
+                    <img src="https://web.archive.org/web/20070423080733/http://hk.geocities.com/fatherofchemistry/new.gif"
+                        alt="New Icon">
                 </div>
-                <p><u>Szabo, D.</u>; Fischer, S.; Mathew, A. P.; Kruve, A. Prioritization, Identification, and Quantification of Emerging Contaminants in Recycled Textiles Using Non-Targeted and Suspect Screening Workflows by LC-ESI-HRMS. <i>Anal. Chem.</i> <b>2024.</b> DOI: <a href="https://doi.org/10.1021/acs.analchem.4c02041">10.1021/acs.analchem.4c02041.</a></p>
-                <p></p>
+                <p><u>Szabo, D.</u>; Fischer, S.; Mathew, A. P.; Kruve, A. Prioritization, Identification, and
+                    Quantification of Emerging Contaminants in Recycled Textiles Using Non-Targeted and Suspect
+                    Screening Workflows by LC-ESI-HRMS. <i>Anal. Chem.</i> <b>2024</b>. <a
+                        href="https://doi.org/10.1021/acs.analchem.4c02041">DOI: 10.1021/acs.analchem.4c02041</a>.</p>
+                <p><u>Szabo, D.</u>; Falconer, T. M.; Fisher, C. M.; Heise, T.; Phillips, A. L.; Vas, G.; Williams, A.
+                    J.; Kruve, A. Online and Offline Prioritization of Chemicals of Interest in Suspect Screening and
+                    Non-targeted Screening with High-Resolution Mass Spectrometry. <i>Anal. Chem.</i> <b>2024</b>. <a
+                        href="https://doi.org/10.1021/acs.analchem.3c05705">DOI: 10.1021/acs.analchem.3c05705</a>.</p>
+                <p>Hladik, M. L.; Markus, A.; Helsel, D.; Nowell, L. H.; Polesello, S.; Rüdel, H.; <u>Szabo, D.</u>;
+                    Wilson, I. Evaluating the reliability of environmental concentration data to characterize exposure
+                    in environmental risk assessments. <i>Integr. Environ. Assess. Manag.</i> <b>2024</b>. <a
+                        href="https://doi.org/10.1002/ieam.4893">DOI: 10.1002/ieam.4893</a>.</p>
+                <p>Partington, J. M.; Marchiandi, J.; <u>Szabo, D.</u>; Gooley, A.; Kouremenos, K.; Smith, F.; Clarke,
+                    B. O. Validating blood microsampling for per- and polyfluoroalkyl substances quantification in whole
+                    blood. <i>J. Chromatogr. A</i> <b>2024</b>, <i>1713</i>, 464522. <a
+                        href="https://doi.org/10.1016/j.chroma.2023.464522">DOI: 10.1016/j.chroma.2023.464522</a>.</p>
+                <p>Foord, C. S.; <u>Szabo, D.</u>; Robb, K.; Clarke, B. O.; Nugegoda, D. Hepatic concentrations of per-
+                    and polyfluoroalkyl substances (PFAS) in dolphins from south-east Australia: Highest reported
+                    globally. <i>Sci. Total Environ.</i> <b>2024</b>, <i>908</i>, 168438. <a
+                        href="https://doi.org/10.1016/j.scitotenv.2023.168438">DOI: 10.1016/j.scitotenv.2023.168438</a>.
+                </p>
+                <p><u>Szabo, D.</u>; Marchiandi, J.; Samandra, S.; Johnston, J. M.; Mulder, R. A.; Green, M. P.; Clarke,
+                    B. O. High-resolution temporal wastewater treatment plant investigation to understand influent mass
+                    flux of per- and polyfluoroalkyl substances (PFAS). <i>J. Hazard. Mater.</i> <b>2023</b>,
+                    <i>447</i>, 130854. <a href="https://doi.org/10.1016/j.hazmat.2023.130854">DOI:
+                        10.1016/j.hazmat.2023.130854.</a></p>
+                <p>Partington, J. M.; Rana, S.; <u>Szabo, D.</u>; Anumol, T.; Clarke, B. O. Comparison of
+                    high-resolution mass spectrometry acquisition methods for the simultaneous quantification and
+                    identification of per- and polyfluoroalkyl substances (PFAS). <i>Anal. Bioanal. Chem.</i>
+                    <b>2023</b>, <i>416</i>, 895-912. <a href="https://doi.org/10.1007/s00216-023-05075-x">DOI:
+                        10.1007/s00216-023-05075-x</a>.</p>
+                <p><u>Szabo, D.</u>; Nuske, M. R.; Lavers, J. L.; Shimeta, J.; Green, M. P.; Mulder, R. A.; Clarke, B.
+                    O. A baseline study of per- and polyfluoroalkyl substances (PFASs) in waterfowl from a remote
+                    Australian environment. <i>Sci. Total Environ.</i> <b>2022</b>, <i>812</i>, 152528. <a
+                        href="https://doi.org/10.1016/j.scitotenv.2021.152528">DOI: 10.1016/j.scitotenv.2021.152528</a>.
+                </p>
+                <div style="display: flex; align-items: center;">
+                    <p><u>Szabo, D.</u>; Moodie, D.; Green, M. P.; Mulder, R. A.; Clarke, B. O. Field-Based Distribution
+                        and Bioaccumulation Factors for Cyclic and Aliphatic Per- and Polyfluoroalkyl Substances (PFASs)
+                        in an Urban Sedentary Waterbird Population. <i>Environ. Sci. Technol.</i> <b>2022</b>, 56 (12),
+                        8231-8244. DOI: <a href="https://doi.org/10.1021/acs.est.2c01965"
+                            target="_blank">https://doi.org/10.1021/acs.est.2c01965.</a></p>
+                    <a href="https://australasia.setac.org/notice/drew-szabo-wins-the-2022-setac-au-postgraduate-research-publication-award"
+                        target="_blank">
+                        <img src="https://web.archive.org/web/20091027000128/http://www.geocities.com/wannawin.geo/trophy1.gif"
+                            style="float: right; margin: 0 0 10px 10px;">
+                    </a>
+                </div>
+                <p><u>Szabo, D.</u>; Marchiandi, J.; Green, M. P.; Mulder, R. A.; Clarke, B. O. Evaluation and
+                    validation of methodologies for the extraction of per- and polyfluoroalkyl substances (PFASs) in
+                    serum of birds and mammals. <i>Anal. Bioanal. Chem.</i> <b>2022</b>, <i>414</i> (9), 3017-3032. <a
+                        href="https://doi.org/10.1007/s00216-022-03962-3">DOI: 10.1007/s00216-022-03962-3</a>.</p>
+                <p>Rana, S.; Marchiandi, J.; Partington, J. M.; <u>Szabo, D.</u>; Heffernan, A. L.; Symons, R. K.; Xie,
+                    S.; Clarke, B. O. Identification of novel polyfluoroalkyl substances in surface water runoff from a
+                    chemical stockpile fire. <i>Environ. Pollut.</i> <b>2022</b>, <i>313</i>, 120055. <a
+                        href="https://doi.org/10.1016/j.envpol.2022.120055">DOI: 10.1016/j.envpol.2022.120055</a>.</p>
+                <p><u>Szabo, D.</u>; Lavers, J. L.; Shimeta, J.; Green, M. P.; Mulder, R. A.; Clarke, B. O. Correlations
+                    between per- and polyfluoroalkyl substances and body morphometrics in fledgling shearwaters impacted
+                    by plastic consumption from a remote Pacific Island. <i>Environ. Toxicol. Chem.</i> <b>2021</b>,
+                    <i>40</i> (3), 799-810. <a href="https://doi.org/10.1002/etc.4924">DOI: 10.1002/etc.4924</a>.</p>
+                <p>Marchiandi, J.; <u>Szabo, D.</u>; Dagnino, S.; Green, M. P.; Clarke, B. O. Occurrence and fate of
+                    legacy and novel per- and polyfluoroalkyl substances (PFASs) in freshwater after an industrial fire
+                    of unknown chemical stockpiles. <i>Environ. Pollut.</i> <b>2021</b>, <i>278</i>, 116839. <a
+                        href="https://doi.org/10.1016/j.envpol.2021.116839">DOI: 10.1016/j.envpol.2021.116839</a>.</p>
+                <p>Hepburn, E.; Madden, C.; <u>Szabo, D.</u>; Coggan, T. L.; Clarke, B.; Currell, M. Contamination of
+                    groundwater with per- and polyfluoroalkyl substances (PFAS) from legacy landfills in an urban
+                    re-development precinct. <i>Environ. Pollut.</i> <b>2019</b>, <i>248</i>, 101-113. <a
+                        href="https://doi.org/10.1016/j.envpol.2019.02.018">DOI: 10.1016/j.envpol.2019.02.018</a>.</p>
+                <p>Coggan, T. L.; Moodie, D.; Kolobaric, A.; <u>Szabo, D.</u>; Shimeta, J.; Crosbie, N. D.; Lee, E.;
+                    Fernandes, M.; Clarke, B. O. An investigation into per- and polyfluoroalkyl substances (PFAS) in
+                    nineteen Australian wastewater treatment plants (WWTPs). <i>Heliyon</i> <b>2019</b>, <i>5</i> (8),
+                    e02316. <a href="https://doi.org/10.1016/j.heliyon.2019.e02316">DOI:
+                        10.1016/j.heliyon.2019.e02316</a>.</p>
+                <p><u>Szabo, D.</u>; Coggan, T. L.; Robson, T. C.; Currell, M.; Clarke, B. O. Investigating recycled
+                    water use as a diffuse source of per- and polyfluoroalkyl substances (PFASs) to groundwater in
+                    Melbourne, Australia. <i>Sci. Total Environ.</i> <b>2018</b>, <i>644</i>, 1409-1417. <a
+                        href="https://doi.org/10.1016/j.scitotenv.2018.07.048">DOI: 10.1016/j.scitotenv.2018.07.048</a></p>
+                        <img src="https://web.archive.org/web/20060524124636/http://uk.geocities.com:80/paul.buglass2005@btinternet.com/yas_pages/yas_gifs/colorbar.gif"
+                        style="width: 100%; height: auto;">
+            </section>
+            <section id="conferences">
+                <h2>Conferences</h2>
+                <img src="https://web.archive.org/web/20091026201427/http://au.geocities.com/queens_park_ipswich/construction.gif">
             </section>
             <section id="archive">
                 <h2>Previous Projects</h2>
-                <h3>Formas Postdoctoral Researcher - Stockholm University</h3>
-                <p>This project aimed to determine the source and fate of emerging contaminants derived from recycled textile processes.
-                    High-resolution mass spectrometry was utilised to extract, identify and prioritise features from recycled textiles by predicting their toxicity and concentration.
+                <h3>Tandem development of waste textile recycling process and chemical screening for a non-toxic
+                    Re:Start</h3>
+                <h4>Formas Postdoctoral Researcher - Stockholm University</h4>
+                <p>Re:start aims to develop a tandem method combining sustainable processes and online chemical analysis to enhance the safety and sustainability of textile waste recycling. The project focuses on reclaiming PET, acrylics, nanocellulose, and hybrids for conversion into monomers, chemicals, or new materials while ensuring toxic-free, high-quality outputs. Fast, non-invasive analysis methods will detect harmful chemicals during recycling, promoting resource-efficient, green technologies that reduce reliance on virgin resources and minimize waste. This approach aims to position Sweden as a leader in sustainable textile recycling and foster innovative, chemical-smart industries.
+                    <a href="https://kruvelab.com/research/" target="_blank">KruveLab</a>
+                </p>
+                <h3>Transport, bioaccumulation, and risk of per- and polyfluroalkyl substances (PFASs) in birds from south-east Australia</h3>
+                <h4>PhD Candidate - University of Melbourne</h4>
+                <p>This thesis investigates the occurrence, transport, and bioaccumulation of legacy and emerging per- and polyfluoroalkyl substances (PFASs) in native avian species in Southeast Australia. Focusing on exposure pathways from sources like wastewater treatment plants, it reveals significant variations in PFAS concentrations, including novel compounds, in impacted environments. Optimized analytical methods highlight the distribution and bioaccumulation risks, particularly in urban waterbirds, providing crucial insights for assessing the environmental and health impacts of PFAS exposure.
+                    <a href="http://hdl.handle.net/11343/313793" target="_blank">University of Melbourne</a>
                 </p>
             </section>
             <section id="contact" style="text-align: center;">
                 <h2>Contact</h2>
-                <img src="https://web.archive.org/web/20091027033120/http://es.geocities.com/inmomateos/e-mail.gif" alt="Email Icon">
+                <img src="https://web.archive.org/web/20091027033120/http://es.geocities.com/inmomateos/e-mail.gif"
+                    alt="Email Icon">
                 <p><a href="mailto:drew.szabo@york.ac.uk">drew.szabo@york.ac.uk</a></p>
-                <img src="https://web.archive.org/web/20000919010235/http://www.geocities.com:80/Athens/Olympus/5037/Graphics/E-Mail/emailme.gif">
+                <img
+                    src="https://web.archive.org/web/20000919010235/http://www.geocities.com:80/Athens/Olympus/5037/Graphics/E-Mail/emailme.gif">
             </section>
         </div>
     </div>
 </body>
+
 </html>
