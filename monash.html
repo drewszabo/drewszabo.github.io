@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chemical Reaction Kinetics Explorer</title>
+  <!-- Tailwind CSS for responsive layout and modern scientific styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter for UI & JetBrains Mono for tabular numbers/equations -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    /* Crisp focus states and tabular alignment for spreadsheet-style table inputs */
+    .cell-input {
+      font-variant-numeric: tabular-nums;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+    .cell-input:focus {
+      outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.18);
+      background-color: #ffffff;
+    }
+    .cell-input.is-invalid {
+      border-color: #f59e0b;
+      background-color: #fffbeb;
+      color: #92400e;
+    }
+    .cell-input.is-invalid:focus {
+      border-color: #d97706;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.22);
+    }
+    .order-card-interactive {
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    }
+    .order-card-interactive:hover {
+      transform: translateY(-2px);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.96); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop-in {
+      animation: popIn 0.22s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- 1. Header Bar -->
+  <header class="bg-white border-b border-slate-200 shadow-xs sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+        <!-- Brand & Title -->
+        <div class="flex items-start sm:items-center gap-3">
+          <div class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-xs shrink-0">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 3h6m-5 0v5.172a2 2 0 01-.586 1.414l-4.828 4.828A2 2 0 004 15.828V18a3 3 0 003 3h10a3 3 0 003-3v-2.172a2 2 0 00-.586-1.414l-4.828-4.828A2 2 0 0114 8.172V3" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.5 15h11" />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-lg sm:text-2xl font-bold text-slate-900 tracking-tight">
+              Chemical Reaction Kinetics Explorer
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-500">
+              0th, 1st &amp; 2nd Order Integrated Rate Law &amp; Linear Regression Analyzer
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick Example Preset Buttons -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1">Examples:</span>
+          <button
+            type="button"
+            data-preset="example1"
+            class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 transition-colors cursor-pointer"
+          >
+            Example 1
+          </button>
+          <button
+            type="button"
+            data-preset="example2"
+            class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 transition-colors cursor-pointer"
+          >
+            Example 2
+          </button>
+          <button
+            type="button"
+            data-preset="example3"
+            class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 transition-colors cursor-pointer"
+          >
+            Example 3
+          </button>
+          <button
+            type="button"
+            data-preset="example4"
+            class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 transition-colors cursor-pointer"
+          >
+            Example 4
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- 2. Simplified Reaction Stoichiometry Control (Card) -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div class="px-5 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Left: Step Label & Inline [ a ] A -> B Input -->
+        <div class="flex flex-wrap items-center gap-3 sm:gap-4">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold">1</span>
+            <h2 class="text-sm sm:text-base font-semibold text-slate-900">Reaction Stoichiometry</h2>
+          </div>
+
+          <!-- Styled [ a ] A -> B Box -->
+          <div class="inline-flex items-center gap-2.5 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 shadow-2xs">
+            <label for="stoich-coeff-input" class="sr-only">Reactant stoichiometric coefficient a</label>
+            <div class="inline-flex items-center bg-white border border-indigo-300 rounded-lg px-2 py-1 shadow-2xs focus-within:ring-2 focus-within:ring-indigo-500/25 focus-within:border-indigo-600">
+              <span class="text-xs font-mono font-semibold text-slate-400 select-none mr-1">[</span>
+              <input
+                type="number"
+                id="stoich-coeff-input"
+                min="0.001"
+                step="any"
+                value="1"
+                title="Reactant coefficient (a)"
+                class="w-14 text-center text-sm sm:text-base font-mono font-bold text-indigo-700 bg-transparent focus:outline-none"
+              />
+              <span class="text-xs font-mono font-semibold text-slate-400 select-none ml-1">]</span>
+            </div>
+            <span class="text-base sm:text-lg font-mono font-bold text-slate-900 tracking-tight">
+              A &rarr; B
+            </span>
+          </div>
+        </div>
+
+        <!-- Right: Rate Law Badge & Fixed Units Indicator -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <div class="inline-flex flex-wrap items-center gap-2 bg-indigo-50 border border-indigo-200/80 px-3.5 py-2 rounded-xl text-xs">
+            <span class="font-mono font-semibold text-indigo-950">
+              Rate = -(1/a) d[A]/dt = k[A]&#8319;
+            </span>
+            <span class="text-indigo-300">|</span>
+            <span id="slope-relation-banner" class="font-mono font-medium text-indigo-700">
+              a = 1 &rArr; k = |m|
+            </span>
+          </div>
+
+          <span class="inline-flex items-center px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-medium">
+            Units: <strong class="font-mono text-slate-800 mx-1">s</strong> &amp; <strong class="font-mono text-slate-800 ml-1">M</strong>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. User-Defined Data Input Table Section (Prominent Card) -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/70 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold">2</span>
+            <h2 class="text-sm sm:text-base font-semibold text-slate-900">Experimental Data Table</h2>
+            <span id="valid-points-badge" class="ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/70">
+              6 valid points
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">
+            Supports decimals (<code class="font-mono text-slate-700 bg-slate-100 px-1 rounded">0.012</code>), E-notation (<code class="font-mono text-slate-700 bg-slate-100 px-1 rounded">1.2e-2</code>), power notation (<code class="font-mono text-slate-700 bg-slate-100 px-1 rounded">1.2*10^-2</code> or <code class="font-mono text-slate-700 bg-slate-100 px-1 rounded">1.2x10^-2</code>), and pasting multi-row data from Excel/Sheets.
+          </p>
+        </div>
+
+        <!-- Table Action Buttons -->
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            type="button"
+            id="add-row-btn"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 active:bg-indigo-800 transition-colors shadow-xs cursor-pointer"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            + Add Row
+          </button>
+          <button
+            type="button"
+            id="clear-table-btn"
+            class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 transition-colors cursor-pointer"
+          >
+            Clear Table
+          </button>
+        </div>
+      </div>
+
+      <!-- Validation Notice Banner -->
+      <div id="validation-banner" class="hidden mx-5 mt-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
+        <svg class="w-4 h-4 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+        </svg>
+        <div id="validation-message"></div>
+      </div>
+
+      <!-- Column Visibility Toggle Bar -->
+      <div class="px-5 pt-3.5 pb-1 flex flex-wrap items-center justify-between gap-2">
+        <label for="toggle-calc-cols" class="inline-flex items-center gap-2.5 cursor-pointer select-none group">
+          <input
+            type="checkbox"
+            id="toggle-calc-cols"
+            class="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+          />
+          <span class="text-xs sm:text-sm font-medium text-slate-700 group-hover:text-slate-900">
+            Show calculated transformation columns (<code class="font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">ln[A]</code> and <code class="font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">1/[A]</code>)
+          </span>
+        </label>
+        <span class="text-[11px] text-slate-400">
+          Hidden by default so students can focus on raw <span class="font-mono text-slate-600">(t, [A])</span> measurements
+        </span>
+      </div>
+
+      <!-- Responsive HTML Table -->
+      <div class="overflow-x-auto px-5 py-4">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b-2 border-slate-200 bg-slate-50/90 text-xs font-semibold uppercase tracking-wider text-slate-600">
+              <th class="py-3 px-3 w-12 text-center rounded-tl-lg">#</th>
+              <th class="py-3 px-3 min-w-[140px]">
+                Time, <span class="lowercase font-bold text-slate-800">t</span> (<span class="normal-case">s</span>)
+              </th>
+              <th class="py-3 px-3 min-w-[165px]">
+                Conc., <span class="normal-case font-bold text-slate-800">[A]</span> (<span class="normal-case">M</span>)
+              </th>
+              <th id="th-ln" class="hidden py-3 px-3 min-w-[135px] bg-indigo-50/40">
+                <span class="normal-case font-bold text-indigo-700">ln[A]</span>
+                <span class="block text-[10px] font-normal text-slate-400 normal-case">1st Order Y</span>
+              </th>
+              <th id="th-inv" class="hidden py-3 px-3 min-w-[150px] bg-indigo-50/40">
+                <span class="normal-case font-bold text-indigo-700">1/[A]</span> (<span class="normal-case">M&#8315;&#185;</span>)
+                <span class="block text-[10px] font-normal text-slate-400 normal-case">2nd Order Y</span>
+              </th>
+              <th class="py-3 px-3 w-16 text-center rounded-tr-lg">Action</th>
+            </tr>
+          </thead>
+          <tbody id="data-table-body" class="divide-y divide-slate-100 text-sm">
+            <!-- Populated immediately on DOMContentLoaded -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 4. Three Side-by-Side Linear Regression Plots (Interactive Exercise Mode) -->
+    <section aria-label="Integrated Rate Law Plots" class="space-y-3">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-xs px-5 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div class="flex items-start sm:items-center gap-2.5">
+          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold shrink-0 mt-0.5 sm:mt-0">3</span>
+          <div>
+            <h2 class="text-sm sm:text-base font-semibold text-slate-900">Evaluate the Reaction Order (Interactive Exercise)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Which reaction order fits best? <strong class="text-slate-700">Click or tap the graph card below</strong> that forms the straightest line (<span class="font-mono">R&sup2;</span> closest to <span class="font-mono">1.0000</span>).
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button
+            type="button"
+            id="quiz-reset-btn"
+            class="hidden px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+          >
+            Reset Selection
+          </button>
+          <button
+            type="button"
+            id="quiz-reveal-btn"
+            class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-indigo-200 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors cursor-pointer"
+          >
+            Reveal Answer
+          </button>
+        </div>
+      </div>
+
+      <!-- Interactive Evaluation Feedback Banner -->
+      <div id="quiz-feedback-banner" class="hidden rounded-2xl border px-5 py-3.5 text-xs sm:text-sm flex items-start gap-3 animate-pop-in">
+        <div id="quiz-feedback-icon" class="shrink-0 mt-0.5"></div>
+        <div id="quiz-feedback-text" class="flex-1 leading-relaxed"></div>
+      </div>
+
+      <!-- 3-Column Responsive Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- CARD 1: 0TH ORDER KINETICS -->
+        <article
+          id="card-zero"
+          data-order="zero"
+          role="button"
+          tabindex="0"
+          aria-label="Select 0th Order Kinetics as best linear fit"
+          class="order-card-interactive bg-white rounded-2xl border-2 border-slate-200 hover:border-indigo-400 shadow-xs hover:shadow-md flex flex-col overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+        >
+          <div class="px-4 py-3.5 border-b border-slate-100 flex items-center justify-between gap-2">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">0th Order Kinetics</h3>
+              <p id="sub-zero" class="text-xs text-slate-500 font-medium">[A] vs. t</p>
+            </div>
+            <span id="select-pill-zero" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+              Tap to Select
+            </span>
+            <span id="badge-zero" class="hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide bg-emerald-100 text-emerald-800 border border-emerald-300">
+              <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              BEST LINEAR FIT
+            </span>
+          </div>
+
+          <!-- High-DPI Canvas Container -->
+          <div id="container-zero" class="relative w-full h-64 sm:h-72 bg-white p-2">
+            <canvas id="canvas-zero" class="w-full h-full block rounded-lg cursor-crosshair"></canvas>
+            <div id="tooltip-zero" class="pointer-events-none hidden absolute z-10 px-2.5 py-1.5 rounded-lg bg-slate-900/95 text-white text-[11px] font-mono shadow-lg whitespace-nowrap"></div>
+          </div>
+
+          <!-- Linear Regression Results Box -->
+          <div class="p-4 bg-slate-50/90 border-t border-slate-100 mt-auto space-y-2.5">
+            <div class="flex items-center justify-between text-[11px] text-slate-500 gap-2">
+              <span>Integrated Law:</span>
+              <span id="law-zero" class="font-mono font-semibold text-slate-700 bg-white px-2 py-0.5 rounded-md border border-slate-200 truncate">[A] = -k&middot;t + [A]&#8320;</span>
+            </div>
+
+            <div class="bg-white rounded-xl p-3 border border-slate-200/90 space-y-2.5">
+              <div>
+                <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Regression Equation</div>
+                <div id="eq-zero" class="text-xs sm:text-sm font-mono font-semibold text-slate-900 mt-0.5 break-all">&mdash;</div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                <div>
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Determination</div>
+                  <div id="r2-zero" class="text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5">R&sup2; = &mdash;</div>
+                </div>
+                <div>
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Rate Constant (<span class="italic lowercase">k</span>)</div>
+                  <div id="k-zero" class="text-xs sm:text-sm font-mono font-bold text-indigo-700 mt-0.5">&mdash;</div>
+                </div>
+              </div>
+
+              <div id="kobs-row-zero" class="hidden pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                <span class="text-slate-500">Apparent <span class="font-mono font-semibold">k<sub>obs</sub> = |m| = a&middot;k</span>:</span>
+                <span id="kobs-zero" class="font-mono font-semibold text-slate-700">&mdash;</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 2: 1ST ORDER KINETICS -->
+        <article
+          id="card-first"
+          data-order="first"
+          role="button"
+          tabindex="0"
+          aria-label="Select 1st Order Kinetics as best linear fit"
+          class="order-card-interactive bg-white rounded-2xl border-2 border-slate-200 hover:border-indigo-400 shadow-xs hover:shadow-md flex flex-col overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+        >
+          <div class="px-4 py-3.5 border-b border-slate-100 flex items-center justify-between gap-2">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">1st Order Kinetics</h3>
+              <p id="sub-first" class="text-xs text-slate-500 font-medium">ln[A] vs. t</p>
+            </div>
+            <span id="select-pill-first" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+              Tap to Select
+            </span>
+            <span id="badge-first" class="hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide bg-emerald-100 text-emerald-800 border border-emerald-300">
+              <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              BEST LINEAR FIT
+            </span>
+          </div>
+
+          <!-- High-DPI Canvas Container -->
+          <div id="container-first" class="relative w-full h-64 sm:h-72 bg-white p-2">
+            <canvas id="canvas-first" class="w-full h-full block rounded-lg cursor-crosshair"></canvas>
+            <div id="tooltip-first" class="pointer-events-none hidden absolute z-10 px-2.5 py-1.5 rounded-lg bg-slate-900/95 text-white text-[11px] font-mono shadow-lg whitespace-nowrap"></div>
+          </div>
+
+          <!-- Linear Regression Results Box -->
+          <div class="p-4 bg-slate-50/90 border-t border-slate-100 mt-auto space-y-2.5">
+            <div class="flex items-center justify-between text-[11px] text-slate-500 gap-2">
+              <span>Integrated Law:</span>
+              <span id="law-first" class="font-mono font-semibold text-slate-700 bg-white px-2 py-0.5 rounded-md border border-slate-200 truncate">ln[A] = -k&middot;t + ln[A]&#8320;</span>
+            </div>
+
+            <div class="bg-white rounded-xl p-3 border border-slate-200/90 space-y-2.5">
+              <div>
+                <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Regression Equation</div>
+                <div id="eq-first" class="text-xs sm:text-sm font-mono font-semibold text-slate-900 mt-0.5 break-all">&mdash;</div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                <div>
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Determination</div>
+                  <div id="r2-first" class="text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5">R&sup2; = &mdash;</div>
+                </div>
+                <div>
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Rate Constant (<span class="italic lowercase">k</span>)</div>
+                  <div id="k-first" class="text-xs sm:text-sm font-mono font-bold text-indigo-700 mt-0.5">&mdash;</div>
+                </div>
+              </div>
+
+              <div id="kobs-row-first" class="hidden pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                <span class="text-slate-500">Apparent <span class="font-mono font-semibold">k<sub>obs</sub> = |m| = a&middot;k</span>:</span>
+                <span id="kobs-first" class="font-mono font-semibold text-slate-700">&mdash;</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- CARD 3: 2ND ORDER KINETICS -->
+        <article
+          id="card-second"
+          data-order="second"
+          role="button"
+          tabindex="0"
+          aria-label="Select 2nd Order Kinetics as best linear fit"
+          class="order-card-interactive bg-white rounded-2xl border-2 border-slate-200 hover:border-indigo-400 shadow-xs hover:shadow-md flex flex-col overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+        >
+          <div class="px-4 py-3.5 border-b border-slate-100 flex items-center justify-between gap-2">
+            <div>
+              <h3 class="text-sm font-bold text-slate-900">2nd Order Kinetics</h3>
+              <p id="sub-second" class="text-xs text-slate-500 font-medium">1/[A] vs. t</p>
+            </div>
+            <span id="select-pill-second" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+              Tap to Select
+            </span>
+            <span id="badge-second" class="hidden inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold tracking-wide bg-emerald-100 text-emerald-800 border border-emerald-300">
+              <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              BEST LINEAR FIT
+            </span>
+          </div>
+
+          <!-- High-DPI Canvas Container -->
+          <div id="container-second" class="relative w-full h-64 sm:h-72 bg-white p-2">
+            <canvas id="canvas-second" class="w-full h-full block rounded-lg cursor-crosshair"></canvas>
+            <div id="tooltip-second" class="pointer-events-none hidden absolute z-10 px-2.5 py-1.5 rounded-lg bg-slate-900/95 text-white text-[11px] font-mono shadow-lg whitespace-nowrap"></div>
+          </div>
+
+          <!-- Linear Regression Results Box -->
+          <div class="p-4 bg-slate-50/90 border-t border-slate-100 mt-auto space-y-2.5">
+            <div class="flex items-center justify-between text-[11px] text-slate-500 gap-2">
+              <span>Integrated Law:</span>
+              <span id="law-second" class="font-mono font-semibold text-slate-700 bg-white px-2 py-0.5 rounded-md border border-slate-200 truncate">1/[A] = k&middot;t + 1/[A]&#8320;</span>
+            </div>
+
+            <div class="bg-white rounded-xl p-3 border border-slate-200/90 space-y-2.5">
+              <div>
+                <div class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Regression Equation</div>
+                <div id="eq-second" class="text-xs sm:text-sm font-mono font-semibold text-slate-900 mt-0.5 break-all">&mdash;</div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
+                <div>
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Determination</div>
+                  <div id="r2-second" class="text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5">R&sup2; = &mdash;</div>
+                </div>
+                <div>
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Rate Constant (<span class="italic lowercase">k</span>)</div>
+                  <div id="k-second" class="text-xs sm:text-sm font-mono font-bold text-indigo-700 mt-0.5">&mdash;</div>
+                </div>
+              </div>
+
+              <div id="kobs-row-second" class="hidden pt-1.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                <span class="text-slate-500">Apparent <span class="font-mono font-semibold">k<sub>obs</sub> = |m| = a&middot;k</span>:</span>
+                <span id="kobs-second" class="font-mono font-semibold text-slate-700">&mdash;</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // =========================================================================
+      // 1. INSTRUCTOR PRESETS — EDIT YOUR CLASS EXAMPLES HERE
+      // =========================================================================
+      // How to customize each preset for your lecture/class:
+      //   - stoichA : Reactant stoichiometric coefficient 'a' in [a] A -> B (e.g. 1 or 2)
+      //   - rows    : Array of { t: 'time_in_s', a: 'conc_in_M' } data points.
+      //               Both standard decimals ('0.500') and scientific notation
+      //               ('1.20e-2' or '1.2*10^-2') are supported.
+      // =========================================================================
+
+      const PRESETS = {
+        // --- EXAMPLE 1 (Default: 0th-order kinetics, a = 1) ---
+        example1: {
+          stoichA: 1,
+          rows: [
+            { t: '0', a: '0.500' },
+            { t: '10', a: '0.420' },
+            { t: '20', a: '0.340' },
+            { t: '30', a: '0.260' },
+            { t: '40', a: '0.180' },
+            { t: '50', a: '0.100' },
+          ],
+        },
+
+        // --- EXAMPLE 2 (Default: 0th-order kinetics with stoichiometry a = 2) ---
+        example2: {
+          stoichA: 2,
+          rows: [
+            { t: '0', a: '1.20e-2' },
+            { t: '20', a: '1.00e-2' },
+            { t: '40', a: '8.00e-3' },
+            { t: '60', a: '6.00e-3' },
+            { t: '80', a: '4.00e-3' },
+            { t: '100', a: '2.00e-3' },
+          ],
+        },
+
+        // --- EXAMPLE 3 (Default: 1st-order kinetics, a = 1) ---
+        example3: {
+          stoichA: 1,
+          rows: [
+            { t: '0', a: '2.40e-2' },
+            { t: '50', a: '1.63e-2' },
+            { t: '100', a: '1.11e-2' },
+            { t: '150', a: '7.52e-3' },
+            { t: '200', a: '5.11e-3' },
+            { t: '250', a: '3.47e-3' },
+          ],
+        },
+
+        // --- EXAMPLE 4 (Default: 2nd-order kinetics, a = 1) ---
+        example4: {
+          stoichA: 1,
+          rows: [
+            { t: '0', a: '1.00e-2' },
+            { t: '50', a: '6.67e-3' },
+            { t: '100', a: '5.00e-3' },
+            { t: '150', a: '4.00e-3' },
+            { t: '200', a: '3.33e-3' },
+            { t: '250', a: '2.86e-3' },
+          ],
+        },
+      };
+
+      // =========================================================================
+      // APPLICATION STATE
+      // =========================================================================
+
+      const state = {
+        rows: [],
+        nextId: 1,
+        stoichA: 1,
+        showCalcCols: false,
+        selectedOrder: null,
+        answerRevealed: false,
+        trueBestOrder: null,
+        latestRegressions: null,
+        latestValidCount: 0,
+        activePreset: 'example1',
+        plotModels: { zero: null, first: null, second: null },
+        hoveredIndex: { zero: -1, first: -1, second: -1 },
+      };
+
+      // =========================================================================
+      // 2. SCIENTIFIC NOTATION PARSER & LINEAR REGRESSION UTILITIES
+      // =========================================================================
+
+      /**
+       * Parses decimals (0.012), E-notation (1.2e-2), and power notation
+       * (1.2*10^-2, 1.2x10^-2, 1.2 x 10**-2) into a finite JavaScript number.
+       * Uses pure ASCII regexes and escape sequences.
+       */
+      function parseScientificNumber(raw) {
+        if (raw === null || raw === undefined) return null;
+        let str = String(raw).trim();
+        if (str === '') return null;
+
+        // Map Unicode superscripts and minus signs using pure ASCII \uXXXX escapes
+        const superMap = {
+          '\u2070': '0',
+          '\u00b9': '1',
+          '\u00b2': '2',
+          '\u00b3': '3',
+          '\u2074': '4',
+          '\u2075': '5',
+          '\u2076': '6',
+          '\u2077': '7',
+          '\u2078': '8',
+          '\u2079': '9',
+          '\u207a': '+',
+          '\u207b': '-',
+        };
+
+        str = str
+          .replace(/[\u2212\u2013\u2014]/g, '-')
+          .replace(/[\u2070\u00b9\u00b2\u00b3\u2074-\u2079\u207a\u207b]/g, function (ch) {
+            return superMap[ch] || ch;
+          })
+          .replace(/\s+/g, '');
+
+        // Standard decimal or E-notation
+        if (/^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$/.test(str)) {
+          const num = Number(str);
+          return Number.isFinite(num) ? num : null;
+        }
+
+        // Explicit power-of-10 notation: e.g. 1.2*10^-2, 1.2x10^-2, 1.2\u00d710^-2, 10^-3
+        const sciMatch = str.match(
+          /^([+-]?(?:\d+\.?\d*|\.\d+))?(?:[*xX\u00d7\u00b7])?10(?:\^|\*\*)([+-]?\d+)$/
+        );
+        if (sciMatch) {
+          const mStr = sciMatch[1];
+          const eStr = sciMatch[2];
+          let mantissa = 1;
+          if (mStr === '-') {
+            mantissa = -1;
+          } else if (mStr !== undefined && mStr !== '' && mStr !== '+') {
+            mantissa = Number(mStr);
+          }
+          const exponent = Number(eStr);
+          if (Number.isFinite(mantissa) && Number.isFinite(exponent)) {
+            const val = mantissa * Math.pow(10, exponent);
+            return Number.isFinite(val) ? val : null;
+          }
+        }
+
+        return null;
+      }
+
+      /**
+       * Formats a numeric value using Auto-Detect formatting:
+       * clean decimal for normal magnitudes (0.001 <= |num| < 10000),
+       * E-notation for |num| < 0.001 or |num| >= 10000.
+       */
+      function formatNumber(num) {
+        if (!Number.isFinite(num)) return '\u2014';
+        if (Math.abs(num) < 1e-18) return '0';
+
+        const abs = Math.abs(num);
+        if (abs < 0.001 || abs >= 10000) {
+          const s2 = num.toExponential(2);
+          if (Math.abs(num - Number(s2)) / abs < 1e-5) {
+            return s2;
+          }
+          return num.toExponential(3);
+        }
+        return parseFloat(num.toFixed(5)).toString();
+      }
+
+      /**
+       * Formats regression coefficients (slope, intercept, k) with consistent precision.
+       */
+      function formatStatNumber(num) {
+        if (!Number.isFinite(num)) return '\u2014';
+        if (Math.abs(num) < 1e-18) return '0.0000';
+
+        const abs = Math.abs(num);
+        if (abs < 0.001 || abs >= 10000) {
+          return num.toExponential(2);
+        }
+        return num.toFixed(4);
+      }
+
+      /**
+       * Formats axis tick labels compactly in Auto-Detect mode.
+       */
+      function formatTick(num) {
+        if (Math.abs(num) < 1e-15) return '0';
+        const abs = Math.abs(num);
+        if (abs < 0.001 || abs >= 10000) {
+          return num.toExponential(1);
+        }
+        return parseFloat(num.toPrecision(4)).toString();
+      }
+
+      /**
+       * Ordinary Least Squares (OLS) linear regression: y = m*x + b and R^2.
+       */
+      function computeLinearRegression(xs, ys) {
+        const n = xs.length;
+        if (n < 2 || ys.length !== n) return null;
+
+        let sumX = 0;
+        let sumY = 0;
+        let sumXY = 0;
+        let sumX2 = 0;
+
+        for (let i = 0; i < n; i++) {
+          sumX += xs[i];
+          sumY += ys[i];
+          sumXY += xs[i] * ys[i];
+          sumX2 += xs[i] * xs[i];
+        }
+
+        const denom = n * sumX2 - sumX * sumX;
+        if (Math.abs(denom) < 1e-30) return null;
+
+        const slope = (n * sumXY - sumX * sumY) / denom;
+        const meanX = sumX / n;
+        const meanY = sumY / n;
+        const intercept = meanY - slope * meanX;
+
+        let ssTot = 0;
+        let ssRes = 0;
+        for (let i = 0; i < n; i++) {
+          const yPred = slope * xs[i] + intercept;
+          ssTot += Math.pow(ys[i] - meanY, 2);
+          ssRes += Math.pow(ys[i] - yPred, 2);
+        }
+
+        let r2 = 0;
+        if (ssTot < 1e-30) {
+          r2 = ssRes < 1e-30 ? 1 : 0;
+        } else {
+          r2 = 1 - ssRes / ssTot;
+          if (r2 > 1) r2 = 1;
+          if (r2 < 0) r2 = 0;
+        }
+
+        return { slope: slope, intercept: intercept, r2: r2 };
+      }
+
+      /**
+       * Computes clean axis scale bounds and rounded ticks.
+       */
+      function computeNiceScale(minVal, maxVal, targetTicks) {
+        const tickCount = targetTicks || 5;
+        let min = minVal;
+        let max = maxVal;
+
+        if (min === max) {
+          const pad = min === 0 ? 1 : Math.abs(min) * 0.2;
+          min -= pad;
+          max += pad;
+        } else {
+          const range = max - min;
+          min -= range * 0.08;
+          max += range * 0.08;
+        }
+
+        if (minVal >= 0 && min < 0) {
+          min = 0;
+        }
+
+        const rawRange = max - min;
+        const roughStep = rawRange / (tickCount - 1);
+        const mag = Math.pow(10, Math.floor(Math.log10(roughStep)));
+        const residual = roughStep / mag;
+
+        let niceStep;
+        if (residual <= 1.5) niceStep = 1 * mag;
+        else if (residual <= 3) niceStep = 2 * mag;
+        else if (residual <= 7) niceStep = 5 * mag;
+        else niceStep = 10 * mag;
+
+        const niceMin = Math.floor(min / niceStep) * niceStep;
+        const niceMax = Math.ceil(max / niceStep) * niceStep;
+
+        const ticks = [];
+        const steps = Math.round((niceMax - niceMin) / niceStep);
+        for (let i = 0; i <= steps; i++) {
+          ticks.push(niceMin + i * niceStep);
+        }
+
+        return { min: niceMin, max: niceMax, step: niceStep, ticks: ticks };
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/"/g, '&quot;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      // =========================================================================
+      // 3. UI & TABLE SYNCHRONIZATION
+      // =========================================================================
+
+      function getElements() {
+        return {
+          stoichCoeffInput: document.getElementById('stoich-coeff-input'),
+          slopeRelationBanner: document.getElementById('slope-relation-banner'),
+          validPointsBadge: document.getElementById('valid-points-badge'),
+          addRowBtn: document.getElementById('add-row-btn'),
+          clearTableBtn: document.getElementById('clear-table-btn'),
+          toggleCalcColsCheckbox: document.getElementById('toggle-calc-cols'),
+          thLn: document.getElementById('th-ln'),
+          thInv: document.getElementById('th-inv'),
+          validationBanner: document.getElementById('validation-banner'),
+          validationMessage: document.getElementById('validation-message'),
+          tableBody: document.getElementById('data-table-body'),
+          quizResetBtn: document.getElementById('quiz-reset-btn'),
+          quizRevealBtn: document.getElementById('quiz-reveal-btn'),
+          quizFeedbackBanner: document.getElementById('quiz-feedback-banner'),
+          quizFeedbackIcon: document.getElementById('quiz-feedback-icon'),
+          quizFeedbackText: document.getElementById('quiz-feedback-text'),
+          presetBtns: document.querySelectorAll('.preset-btn'),
+          orders: {
+            zero: {
+              card: document.getElementById('card-zero'),
+              law: document.getElementById('law-zero'),
+              selectPill: document.getElementById('select-pill-zero'),
+              badge: document.getElementById('badge-zero'),
+              container: document.getElementById('container-zero'),
+              canvas: document.getElementById('canvas-zero'),
+              tooltip: document.getElementById('tooltip-zero'),
+              eq: document.getElementById('eq-zero'),
+              r2: document.getElementById('r2-zero'),
+              k: document.getElementById('k-zero'),
+              kobsRow: document.getElementById('kobs-row-zero'),
+              kobs: document.getElementById('kobs-zero'),
+            },
+            first: {
+              card: document.getElementById('card-first'),
+              law: document.getElementById('law-first'),
+              selectPill: document.getElementById('select-pill-first'),
+              badge: document.getElementById('badge-first'),
+              container: document.getElementById('container-first'),
+              canvas: document.getElementById('canvas-first'),
+              tooltip: document.getElementById('tooltip-first'),
+              eq: document.getElementById('eq-first'),
+              r2: document.getElementById('r2-first'),
+              k: document.getElementById('k-first'),
+              kobsRow: document.getElementById('kobs-row-first'),
+              kobs: document.getElementById('kobs-first'),
+            },
+            second: {
+              card: document.getElementById('card-second'),
+              law: document.getElementById('law-second'),
+              selectPill: document.getElementById('select-pill-second'),
+              badge: document.getElementById('badge-second'),
+              container: document.getElementById('container-second'),
+              canvas: document.getElementById('canvas-second'),
+              tooltip: document.getElementById('tooltip-second'),
+              eq: document.getElementById('eq-second'),
+              r2: document.getElementById('r2-second'),
+              k: document.getElementById('k-second'),
+              kobsRow: document.getElementById('kobs-row-second'),
+              kobs: document.getElementById('kobs-second'),
+            },
+          },
+        };
+      }
+
+      let dom = null;
+
+      function updatePresetButtonStyles() {
+        dom.presetBtns.forEach(function (btn) {
+          const isSelected = btn.dataset.preset === state.activePreset;
+          if (isSelected) {
+            btn.classList.remove('border-slate-300', 'bg-white', 'text-slate-700');
+            btn.classList.add('border-indigo-600', 'bg-indigo-600', 'text-white', 'shadow-xs');
+          } else {
+            btn.classList.add('border-slate-300', 'bg-white', 'text-slate-700');
+            btn.classList.remove('border-indigo-600', 'bg-indigo-600', 'text-white', 'shadow-xs');
+          }
+        });
+      }
+
+      function updateStoichLabels() {
+        const a = state.stoichA > 0 ? state.stoichA : 1;
+        const isUnit = Math.abs(a - 1) < 1e-9;
+        const aText = isUnit ? '' : a + '\u00b7';
+
+        dom.slopeRelationBanner.textContent = isUnit
+          ? 'a = 1 \u21d2 k = |m|'
+          : 'a = ' + a + ' \u21d2 k = |m| / ' + a;
+
+        dom.orders.zero.law.textContent = '[A] = -' + aText + 'k\u00b7t + [A]\u2080';
+        dom.orders.first.law.textContent = 'ln[A] = -' + aText + 'k\u00b7t + ln[A]\u2080';
+        dom.orders.second.law.textContent = '1/[A] = ' + aText + 'k\u00b7t + 1/[A]\u2080';
+      }
+
+      function renderTable() {
+        if (!dom.tableBody) return;
+        dom.tableBody.innerHTML = '';
+        const calcHiddenClass = state.showCalcCols ? '' : 'hidden';
+
+        if (dom.thLn) dom.thLn.classList.toggle('hidden', !state.showCalcCols);
+        if (dom.thInv) dom.thInv.classList.toggle('hidden', !state.showCalcCols);
+
+        state.rows.forEach(function (row, idx) {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50/80 transition-colors';
+          tr.dataset.rowId = String(row.id);
+
+          const parsedT = parseScientificNumber(row.t);
+          const invalidT = row.t.trim() !== '' && parsedT === null;
+
+          const parsedA = parseScientificNumber(row.a);
+          const hasAText = row.a.trim() !== '';
+          const malformedA = hasAText && parsedA === null;
+          const nonPositiveA = parsedA !== null && parsedA <= 0;
+          const invalidA = malformedA || nonPositiveA;
+
+          const lnText =
+            parsedA !== null && parsedA > 0
+              ? formatStatNumber(Math.log(parsedA))
+              : invalidA
+              ? 'Invalid'
+              : '\u2014';
+
+          const invText =
+            parsedA !== null && parsedA > 0
+              ? formatStatNumber(1 / parsedA)
+              : invalidA
+              ? 'Invalid'
+              : '\u2014';
+
+          tr.innerHTML =
+            '<td class="py-2 px-3 text-center text-xs font-mono font-semibold text-slate-400">' +
+            (idx + 1) +
+            '</td>' +
+            '<td class="py-2 px-3">' +
+            '<input type="text" aria-label="Time row ' +
+            (idx + 1) +
+            '" placeholder="e.g. ' +
+            idx * 10 +
+            '" value="' +
+            escapeHtml(row.t) +
+            '" data-field="t" data-id="' +
+            row.id +
+            '" class="cell-input time-input w-full px-3 py-1.5 text-sm font-mono rounded-lg border border-slate-300 bg-slate-50/40 text-slate-900 ' +
+            (invalidT ? 'is-invalid' : '') +
+            '" />' +
+            '</td>' +
+            '<td class="py-2 px-3">' +
+            '<input type="text" aria-label="Concentration row ' +
+            (idx + 1) +
+            '" placeholder="e.g. 1.2e-2" value="' +
+            escapeHtml(row.a) +
+            '" data-field="a" data-id="' +
+            row.id +
+            '" class="cell-input conc-input w-full px-3 py-1.5 text-sm font-mono rounded-lg border border-slate-300 bg-slate-50/40 text-slate-900 ' +
+            (invalidA ? 'is-invalid' : '') +
+            '" />' +
+            '</td>' +
+            '<td class="calc-col py-2 px-3 bg-indigo-50/20 text-xs sm:text-sm font-mono font-medium ' +
+            calcHiddenClass +
+            ' ' +
+            (invalidA ? 'text-amber-600 font-semibold' : 'text-slate-700') +
+            '" data-calc="ln-' +
+            row.id +
+            '">' +
+            lnText +
+            '</td>' +
+            '<td class="calc-col py-2 px-3 bg-indigo-50/20 text-xs sm:text-sm font-mono font-medium ' +
+            calcHiddenClass +
+            ' ' +
+            (invalidA ? 'text-amber-600 font-semibold' : 'text-slate-700') +
+            '" data-calc="inv-' +
+            row.id +
+            '">' +
+            invText +
+            '</td>' +
+            '<td class="py-2 px-3 text-center">' +
+            '<button type="button" data-delete-id="' +
+            row.id +
+            '" aria-label="Delete row ' +
+            (idx + 1) +
+            '" title="Delete row" class="inline-flex items-center justify-center w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 font-bold text-base transition-colors cursor-pointer">&times;</button>' +
+            '</td>';
+
+          dom.tableBody.appendChild(tr);
+        });
+      }
+
+      function toggleCalculatedColumns(show) {
+        state.showCalcCols = Boolean(show);
+        if (dom.thLn) dom.thLn.classList.toggle('hidden', !state.showCalcCols);
+        if (dom.thInv) dom.thInv.classList.toggle('hidden', !state.showCalcCols);
+        const calcCells = dom.tableBody.querySelectorAll('.calc-col');
+        calcCells.forEach(function (cell) {
+          cell.classList.toggle('hidden', !state.showCalcCols);
+        });
+      }
+
+      /**
+       * Updates only the calculated cells and invalid border classes for a single row
+       * while the user is typing, preserving active input focus and cursor position.
+       */
+      function updateRowCalculatedCells(row) {
+        const parsedT = parseScientificNumber(row.t);
+        const invalidT = row.t.trim() !== '' && parsedT === null;
+
+        const parsedA = parseScientificNumber(row.a);
+        const hasAText = row.a.trim() !== '';
+        const malformedA = hasAText && parsedA === null;
+        const nonPositiveA = parsedA !== null && parsedA <= 0;
+        const invalidA = malformedA || nonPositiveA;
+
+        const tInput = dom.tableBody.querySelector('input[data-field="t"][data-id="' + row.id + '"]');
+        const aInput = dom.tableBody.querySelector('input[data-field="a"][data-id="' + row.id + '"]');
+        const lnCell = dom.tableBody.querySelector('[data-calc="ln-' + row.id + '"]');
+        const invCell = dom.tableBody.querySelector('[data-calc="inv-' + row.id + '"]');
+
+        if (tInput) {
+          tInput.classList.toggle('is-invalid', invalidT);
+        }
+        if (aInput) {
+          aInput.classList.toggle('is-invalid', invalidA);
+        }
+
+        if (lnCell && invCell) {
+          const hiddenSuffix = state.showCalcCols ? '' : ' hidden';
+          if (invalidA) {
+            lnCell.textContent = 'Invalid';
+            invCell.textContent = 'Invalid';
+            lnCell.className = 'calc-col py-2 px-3 bg-indigo-50/20 text-xs sm:text-sm font-mono font-semibold text-amber-600' + hiddenSuffix;
+            invCell.className = 'calc-col py-2 px-3 bg-indigo-50/20 text-xs sm:text-sm font-mono font-semibold text-amber-600' + hiddenSuffix;
+          } else if (parsedA !== null) {
+            lnCell.textContent = formatStatNumber(Math.log(parsedA));
+            invCell.textContent = formatStatNumber(1 / parsedA);
+            lnCell.className = 'calc-col py-2 px-3 bg-indigo-50/20 text-xs sm:text-sm font-mono font-medium text-slate-700' + hiddenSuffix;
+            invCell.className = 'calc-col py-2 px-3 bg-indigo-50/20 text-xs sm:text-sm font-mono font-medium text-slate-700' + hiddenSuffix;
+          } else {
+            lnCell.textContent = '\u2014';
+            invCell.textContent = '\u2014';
+            lnCell.className = 'calc-col py-2 px-3 bg-indigo-50/20 text-xs sm:text-sm font-mono font-medium text-slate-700' + hiddenSuffix;
+            invCell.className = 'calc-col py-2 px-3 bg-indigo-50/20 text-xs sm:text-sm font-mono font-medium text-slate-700' + hiddenSuffix;
+          }
+        }
+      }
+
+      function resetExerciseSelection() {
+        state.selectedOrder = null;
+        state.answerRevealed = false;
+        if (dom.quizFeedbackBanner) {
+          dom.quizFeedbackBanner.classList.add('hidden');
+        }
+        if (dom.quizResetBtn) {
+          dom.quizResetBtn.classList.add('hidden');
+        }
+      }
+
+      function loadPreset(presetKey) {
+        const preset = PRESETS[presetKey];
+        if (!preset) return;
+
+        state.activePreset = presetKey;
+        state.stoichA = preset.stoichA;
+        dom.stoichCoeffInput.value = String(preset.stoichA);
+
+        state.rows = preset.rows.map(function (r) {
+          const parsedT = parseScientificNumber(r.t);
+          const parsedA = parseScientificNumber(r.a);
+          return {
+            id: state.nextId++,
+            t: parsedT !== null ? formatNumber(parsedT) : r.t,
+            a: parsedA !== null ? formatNumber(parsedA) : r.a,
+          };
+        });
+
+        resetExerciseSelection();
+        updatePresetButtonStyles();
+        updateStoichLabels();
+        renderTable();
+        recalculateAndRenderPlots();
+      }
+
+      function clearTable() {
+        state.activePreset = null;
+        state.rows = [];
+        for (let i = 0; i < 4; i++) {
+          state.rows.push({ id: state.nextId++, t: '', a: '' });
+        }
+        resetExerciseSelection();
+        updatePresetButtonStyles();
+        renderTable();
+        recalculateAndRenderPlots();
+      }
+
+      // =========================================================================
+      // 4. REGRESSION ENGINE & CARD UPDATES
+      // =========================================================================
+
+      function recalculateAndRenderPlots() {
+        const validPoints = [];
+        let invalidCount = 0;
+        const stoichA = state.stoichA > 0 ? state.stoichA : 1;
+
+        state.rows.forEach(function (row) {
+          const tStr = row.t.trim();
+          const aStr = row.a.trim();
+          if (tStr === '' && aStr === '') return;
+
+          const tVal = parseScientificNumber(tStr);
+          const aVal = parseScientificNumber(aStr);
+
+          if (tStr !== '' && tVal === null) {
+            invalidCount++;
+            return;
+          }
+          if (aStr !== '' && (aVal === null || aVal <= 0)) {
+            invalidCount++;
+            return;
+          }
+
+          if (tVal !== null && aVal !== null && aVal > 0) {
+            validPoints.push({
+              t: tVal,
+              a: aVal,
+              lnA: Math.log(aVal),
+              invA: 1 / aVal,
+            });
+          }
+        });
+
+        validPoints.sort(function (p1, p2) {
+          return p1.t - p2.t;
+        });
+
+        dom.validPointsBadge.textContent =
+          validPoints.length + ' valid point' + (validPoints.length === 1 ? '' : 's');
+
+        if (invalidCount > 0) {
+          dom.validationBanner.classList.remove('hidden');
+          dom.validationMessage.innerHTML =
+            '<strong>Invalid Entry (' +
+            invalidCount +
+            ' row' +
+            (invalidCount > 1 ? 's' : '') +
+            '):</strong> Concentration <span class="font-mono font-semibold">[A]</span> must be strictly greater than <span class="font-mono font-semibold">0</span> (so <span class="font-mono">ln[A]</span> and <span class="font-mono">1/[A]</span> are defined).';
+        } else if (validPoints.length > 0 && validPoints.length < 2) {
+          dom.validationBanner.classList.remove('hidden');
+          dom.validationMessage.innerHTML =
+            '<strong>More Data Needed:</strong> Enter at least <span class="font-semibold">2 valid (t, [A]) data points</span> to compute linear regression lines.';
+        } else {
+          dom.validationBanner.classList.add('hidden');
+        }
+
+        const xs = validPoints.map(function (p) {
+          return p.t;
+        });
+
+        const seriesMap = {
+          zero: {
+            ys: validPoints.map(function (p) {
+              return p.a;
+            }),
+            yLabel: '[A] (M)',
+            ySymbol: '[A]',
+            kUnit: 'M\u00b7s\u207b\u00b9',
+          },
+          first: {
+            ys: validPoints.map(function (p) {
+              return p.lnA;
+            }),
+            yLabel: 'ln[A]',
+            ySymbol: 'ln[A]',
+            kUnit: 's\u207b\u00b9',
+          },
+          second: {
+            ys: validPoints.map(function (p) {
+              return p.invA;
+            }),
+            yLabel: '1/[A] (M\u207b\u00b9)',
+            ySymbol: '1/[A]',
+            kUnit: 'M\u207b\u00b9\u00b7s\u207b\u00b9',
+          },
+        };
+
+        const regressions = {
+          zero: computeLinearRegression(xs, seriesMap.zero.ys),
+          first: computeLinearRegression(xs, seriesMap.first.ys),
+          second: computeLinearRegression(xs, seriesMap.second.ys),
+        };
+
+        // Determine the true best linear fit internally (kept hidden until student selects or reveals)
+        let bestOrder = null;
+        if (validPoints.length >= 3) {
+          let highestR2 = 0.90;
+          ['zero', 'first', 'second'].forEach(function (ord) {
+            const reg = regressions[ord];
+            const validDirection = reg && (ord === 'second' ? reg.slope > 0 : reg.slope < 0);
+            if (validDirection && reg.r2 > highestR2) {
+              highestR2 = reg.r2;
+              bestOrder = ord;
+            }
+          });
+        }
+
+        state.trueBestOrder = bestOrder;
+        state.latestRegressions = regressions;
+        state.latestValidCount = validPoints.length;
+
+        ['zero', 'first', 'second'].forEach(function (ord) {
+          const showAsBest = state.answerRevealed && bestOrder === ord;
+          const showAsWrong =
+            state.selectedOrder === ord && bestOrder !== null && bestOrder !== ord;
+          updateOrderCard(
+            ord,
+            validPoints,
+            seriesMap[ord],
+            regressions[ord],
+            showAsBest,
+            showAsWrong,
+            stoichA
+          );
+          renderOrderCanvas(ord, validPoints, seriesMap[ord], regressions[ord], showAsBest);
+        });
+      }
+
+      function getOrderDisplayName(orderKey) {
+        if (orderKey === 'zero') return '0th-Order ([A] vs. t)';
+        if (orderKey === 'first') return '1st-Order (ln[A] vs. t)';
+        if (orderKey === 'second') return '2nd-Order (1/[A] vs. t)';
+        return orderKey;
+      }
+
+      function showQuizFeedback(type, htmlMessage) {
+        dom.quizFeedbackBanner.classList.remove(
+          'hidden',
+          'bg-emerald-50',
+          'border-emerald-300',
+          'text-emerald-950',
+          'bg-rose-50',
+          'border-rose-300',
+          'text-rose-950',
+          'bg-amber-50',
+          'border-amber-300',
+          'text-amber-950'
+        );
+
+        if (type === 'success') {
+          dom.quizFeedbackBanner.classList.add('bg-emerald-50', 'border-emerald-300', 'text-emerald-950');
+          dom.quizFeedbackIcon.innerHTML =
+            '<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white">' +
+            '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>' +
+            '</span>';
+        } else if (type === 'error') {
+          dom.quizFeedbackBanner.classList.add('bg-rose-50', 'border-rose-300', 'text-rose-950');
+          dom.quizFeedbackIcon.innerHTML =
+            '<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-rose-600 text-white">' +
+            '<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>' +
+            '</span>';
+        } else {
+          dom.quizFeedbackBanner.classList.add('bg-amber-50', 'border-amber-300', 'text-amber-950');
+          dom.quizFeedbackIcon.innerHTML =
+            '<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-amber-500 text-white font-bold text-xs">!</span>';
+        }
+
+        dom.quizFeedbackText.innerHTML = htmlMessage;
+        dom.quizResetBtn.classList.remove('hidden');
+      }
+
+      function handleSelectOrderModel(orderKey) {
+        if (state.latestValidCount < 3 || !state.trueBestOrder || !state.latestRegressions) {
+          showQuizFeedback(
+            'warning',
+            '<strong>More Data Needed:</strong> Enter at least <strong>3 valid (t, [A]) data points</strong> in the table above so you can compare linearity across the three reaction orders.'
+          );
+          return;
+        }
+
+        state.selectedOrder = orderKey;
+        const bestOrd = state.trueBestOrder;
+        const chosenReg = state.latestRegressions[orderKey];
+        const bestReg = state.latestRegressions[bestOrd];
+
+        if (orderKey === bestOrd) {
+          state.answerRevealed = true;
+          showQuizFeedback(
+            'success',
+            '<strong>Correct!</strong> <span class="font-semibold">' +
+              getOrderDisplayName(bestOrd) +
+              '</span> is the best linear fit with the highest coefficient of determination (<span class="font-mono font-bold">R&sup2; = ' +
+              bestReg.r2.toFixed(4) +
+              '</span>). The data points align tightly along the straight regression line.'
+          );
+        } else {
+          state.answerRevealed = false;
+          const chosenR2Text = chosenReg ? chosenReg.r2.toFixed(4) : '\u2014';
+          showQuizFeedback(
+            'error',
+            '<strong>Not quite!</strong> <span class="font-semibold">' +
+              getOrderDisplayName(orderKey) +
+              '</span> has <span class="font-mono font-bold">R&sup2; = ' +
+              chosenR2Text +
+              '</span> and exhibits curvature rather than a straight line. Compare the other two plots to find the one with <span class="font-mono font-semibold">R&sup2;</span> closest to <span class="font-mono font-semibold">1.0000</span>, or click <em>Reveal Answer</em>.'
+          );
+        }
+
+        recalculateAndRenderPlots();
+      }
+
+      function handleRevealAnswer() {
+        if (state.latestValidCount < 3 || !state.trueBestOrder || !state.latestRegressions) {
+          showQuizFeedback(
+            'warning',
+            '<strong>More Data Needed:</strong> Enter at least <strong>3 valid (t, [A]) data points</strong> to evaluate and reveal the reaction order.'
+          );
+          return;
+        }
+
+        state.answerRevealed = true;
+        const bestOrd = state.trueBestOrder;
+        const bestReg = state.latestRegressions[bestOrd];
+        showQuizFeedback(
+          'success',
+          '<strong>Answer Revealed:</strong> <span class="font-semibold">' +
+            getOrderDisplayName(bestOrd) +
+            '</span> provides the straightest linear fit (<span class="font-mono font-bold">R&sup2; = ' +
+            bestReg.r2.toFixed(4) +
+            '</span>).'
+        );
+        recalculateAndRenderPlots();
+      }
+
+      function updateOrderCard(orderKey, validPoints, meta, reg, isBest, isWrong, stoichA) {
+        const ui = dom.orders[orderKey];
+        const showKobs = Math.abs(stoichA - 1) > 1e-9;
+
+        ui.card.classList.remove(
+          'border-slate-200',
+          'hover:border-indigo-400',
+          'border-emerald-500',
+          'ring-2',
+          'ring-emerald-500/20',
+          'border-rose-400',
+          'ring-rose-500/20'
+        );
+
+        if (isBest) {
+          ui.card.classList.add('border-emerald-500', 'ring-2', 'ring-emerald-500/20');
+          ui.badge.classList.remove('hidden');
+          ui.selectPill.classList.add('hidden');
+        } else if (isWrong) {
+          ui.card.classList.add('border-rose-400', 'ring-2', 'ring-rose-500/20');
+          ui.badge.classList.add('hidden');
+          ui.selectPill.classList.remove('hidden');
+          ui.selectPill.className =
+            'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-300';
+          ui.selectPill.textContent = 'Not Linear';
+        } else {
+          ui.card.classList.add('border-slate-200', 'hover:border-indigo-400');
+          ui.badge.classList.add('hidden');
+          ui.selectPill.classList.remove('hidden');
+          ui.selectPill.className =
+            'inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600 border border-slate-200';
+          ui.selectPill.textContent = 'Tap to Select';
+        }
+
+        if (!reg || validPoints.length < 2) {
+          ui.eq.textContent = 'Awaiting \u2265 2 valid points';
+          ui.r2.innerHTML = 'R&sup2; = &mdash;';
+          ui.r2.className = 'text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5';
+          ui.k.textContent = '\u2014';
+          ui.kobs.textContent = '\u2014';
+          ui.kobsRow.classList.toggle('hidden', !showKobs);
+          return;
+        }
+
+        const mStr = formatStatNumber(reg.slope);
+        const bAbsStr = formatStatNumber(Math.abs(reg.intercept));
+        const bSign = reg.intercept >= 0 ? '+' : '-';
+
+        ui.eq.textContent = meta.ySymbol + ' = ' + mStr + ' t ' + bSign + ' ' + bAbsStr;
+        ui.r2.innerHTML = 'R&sup2; = ' + reg.r2.toFixed(4);
+
+        if (isBest) {
+          ui.r2.className = 'text-xs sm:text-sm font-mono font-bold text-emerald-700 mt-0.5';
+        } else if (isWrong) {
+          ui.r2.className = 'text-xs sm:text-sm font-mono font-bold text-rose-700 mt-0.5';
+        } else {
+          ui.r2.className = 'text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5';
+        }
+
+        const kObs = Math.abs(reg.slope);
+        const kTrue = kObs / stoichA;
+
+        ui.k.textContent = formatStatNumber(kTrue) + ' ' + meta.kUnit;
+        ui.kobs.textContent = formatStatNumber(kObs) + ' ' + meta.kUnit;
+        ui.kobsRow.classList.toggle('hidden', !showKobs);
+      }
+
+      // =========================================================================
+      // 5. HIGH-DPI RESPONSIVE CANVAS PLOTTER WITH HOVER TOOLTIPS
+      // =========================================================================
+
+      function renderOrderCanvas(orderKey, validPoints, meta, reg, isBest) {
+        const ui = dom.orders[orderKey];
+        const canvas = ui.canvas;
+        const rect = canvas.getBoundingClientRect();
+
+        if (rect.width === 0 || rect.height === 0) return;
+
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.round(rect.width * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+
+        const width = rect.width;
+        const height = rect.height;
+
+        ctx.clearRect(0, 0, width, height);
+
+        const pad = {
+          top: 16,
+          right: 18,
+          bottom: 44,
+          left: 64,
+        };
+
+        const plotW = Math.max(40, width - pad.left - pad.right);
+        const plotH = Math.max(40, height - pad.top - pad.bottom);
+
+        if (validPoints.length === 0) {
+          state.plotModels[orderKey] = null;
+          ctx.fillStyle = '#f8fafc';
+          ctx.fillRect(pad.left, pad.top, plotW, plotH);
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.strokeRect(pad.left, pad.top, plotW, plotH);
+
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '500 12px Inter, system-ui, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('Enter data or select a preset above', pad.left + plotW / 2, pad.top + plotH / 2);
+          return;
+        }
+
+        const xs = validPoints.map(function (p) {
+          return p.t;
+        });
+        const ys = meta.ys;
+
+        const xScale = computeNiceScale(Math.min.apply(null, xs), Math.max.apply(null, xs), 5);
+        const yScale = computeNiceScale(Math.min.apply(null, ys), Math.max.apply(null, ys), 5);
+
+        const toCanvasX = function (x) {
+          return pad.left + ((x - xScale.min) / (xScale.max - xScale.min)) * plotW;
+        };
+        const toCanvasY = function (y) {
+          return pad.top + plotH - ((y - yScale.min) / (yScale.max - yScale.min)) * plotH;
+        };
+
+        // 1. Gridlines and Tick Labels
+        ctx.lineWidth = 1;
+        ctx.font = '400 10.5px "JetBrains Mono", monospace';
+
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        yScale.ticks.forEach(function (tickVal) {
+          const py = toCanvasY(tickVal);
+          if (py < pad.top - 1 || py > pad.top + plotH + 1) return;
+
+          ctx.beginPath();
+          ctx.setLineDash([3, 3]);
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.moveTo(pad.left, py);
+          ctx.lineTo(pad.left + plotW, py);
+          ctx.stroke();
+
+          ctx.setLineDash([]);
+          ctx.fillStyle = '#64748b';
+          ctx.fillText(formatTick(tickVal), pad.left - 8, py);
+        });
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        xScale.ticks.forEach(function (tickVal) {
+          const px = toCanvasX(tickVal);
+          if (px < pad.left - 1 || px > pad.left + plotW + 1) return;
+
+          ctx.beginPath();
+          ctx.setLineDash([3, 3]);
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.moveTo(px, pad.top);
+          ctx.lineTo(px, pad.top + plotH);
+          ctx.stroke();
+
+          ctx.setLineDash([]);
+          ctx.fillStyle = '#64748b';
+          ctx.fillText(formatTick(tickVal), px, pad.top + plotH + 7);
+        });
+
+        // 2. Solid Axes
+        ctx.setLineDash([]);
+        ctx.lineWidth = 1.25;
+        ctx.strokeStyle = '#94a3b8';
+        ctx.beginPath();
+        ctx.moveTo(pad.left, pad.top);
+        ctx.lineTo(pad.left, pad.top + plotH);
+        ctx.lineTo(pad.left + plotW, pad.top + plotH);
+        ctx.stroke();
+
+        // 3. Axis Titles
+        ctx.fillStyle = '#334155';
+        ctx.font = '600 11px Inter, system-ui, sans-serif';
+
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText('Time, t (s)', pad.left + plotW / 2, height - 4);
+
+        ctx.save();
+        ctx.translate(14, pad.top + plotH / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(meta.yLabel, 0, 0);
+        ctx.restore();
+
+        const accentColor = isBest ? '#059669' : '#4f46e5';
+
+        // 4. Linear Regression Line
+        if (reg && validPoints.length >= 2) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(pad.left, pad.top, plotW, plotH);
+          ctx.clip();
+
+          const xStart = xScale.min;
+          const xEnd = xScale.max;
+          const yStart = reg.slope * xStart + reg.intercept;
+          const yEnd = reg.slope * xEnd + reg.intercept;
+
+          ctx.beginPath();
+          ctx.strokeStyle = accentColor;
+          ctx.lineWidth = isBest ? 2.5 : 2;
+          ctx.moveTo(toCanvasX(xStart), toCanvasY(yStart));
+          ctx.lineTo(toCanvasX(xEnd), toCanvasY(yEnd));
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // 5. Data Points
+        const screenPoints = [];
+        const hoveredIdx = state.hoveredIndex[orderKey];
+
+        validPoints.forEach(function (pt, i) {
+          const yVal = ys[i];
+          const cx = toCanvasX(pt.t);
+          const cy = toCanvasY(yVal);
+          const isHovered = i === hoveredIdx;
+          const yFit = reg ? reg.slope * pt.t + reg.intercept : null;
+
+          screenPoints.push({
+            cx: cx,
+            cy: cy,
+            t: pt.t,
+            yVal: yVal,
+            yFit: yFit,
+            ySymbol: meta.ySymbol,
+          });
+
+          if (isHovered) {
+            ctx.beginPath();
+            ctx.arc(cx, cy, 9.5, 0, Math.PI * 2);
+            ctx.fillStyle = isBest ? 'rgba(5, 150, 105, 0.22)' : 'rgba(79, 70, 229, 0.22)';
+            ctx.fill();
+          }
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, isHovered ? 6 : 4.5, 0, Math.PI * 2);
+          ctx.fillStyle = accentColor;
+          ctx.fill();
+          ctx.lineWidth = 1.75;
+          ctx.strokeStyle = '#ffffff';
+          ctx.stroke();
+        });
+
+        state.plotModels[orderKey] = {
+          points: screenPoints,
+          validPoints: validPoints,
+          meta: meta,
+          reg: reg,
+          isBest: isBest,
+        };
+      }
+
+      function handlePlotPointerMove(orderKey, clientX, clientY) {
+        const model = state.plotModels[orderKey];
+        const ui = dom.orders[orderKey];
+        if (!model || !model.points || model.points.length === 0) {
+          ui.tooltip.classList.add('hidden');
+          return;
+        }
+
+        const rect = ui.canvas.getBoundingClientRect();
+        const mx = clientX - rect.left;
+        const my = clientY - rect.top;
+
+        let closestIdx = -1;
+        let minDist = 18;
+
+        model.points.forEach(function (pt, idx) {
+          const dist = Math.hypot(pt.cx - mx, pt.cy - my);
+          if (dist < minDist) {
+            minDist = dist;
+            closestIdx = idx;
+          }
+        });
+
+        if (closestIdx !== state.hoveredIndex[orderKey]) {
+          state.hoveredIndex[orderKey] = closestIdx;
+          renderOrderCanvas(orderKey, model.validPoints, model.meta, model.reg, model.isBest);
+        }
+
+        if (closestIdx !== -1) {
+          const pt = model.points[closestIdx];
+          let html =
+            '<div>t = <span class="font-bold text-indigo-300">' +
+            formatNumber(pt.t) +
+            ' s</span></div>' +
+            '<div>' +
+            escapeHtml(pt.ySymbol) +
+            ' = <span class="font-bold">' +
+            formatStatNumber(pt.yVal) +
+            '</span></div>';
+
+          if (pt.yFit !== null) {
+            html +=
+              '<div class="text-slate-300">Fit y = <span class="font-semibold text-emerald-300">' +
+              formatStatNumber(pt.yFit) +
+              '</span></div>';
+          }
+
+          ui.tooltip.innerHTML = html;
+          ui.tooltip.classList.remove('hidden');
+
+          const containerW = ui.container.clientWidth;
+          const tipW = ui.tooltip.offsetWidth || 130;
+          let leftPos = pt.cx + 8 - tipW / 2;
+          if (leftPos < 8) leftPos = 8;
+          if (leftPos + tipW > containerW - 8) leftPos = containerW - tipW - 8;
+
+          let topPos = pt.cy - 58;
+          if (topPos < 6) topPos = pt.cy + 14;
+
+          ui.tooltip.style.left = leftPos + 'px';
+          ui.tooltip.style.top = topPos + 'px';
+        } else {
+          ui.tooltip.classList.add('hidden');
+        }
+      }
+
+      function handlePlotPointerLeave(orderKey) {
+        const model = state.plotModels[orderKey];
+        const ui = dom.orders[orderKey];
+        ui.tooltip.classList.add('hidden');
+
+        if (state.hoveredIndex[orderKey] !== -1) {
+          state.hoveredIndex[orderKey] = -1;
+          if (model) {
+            renderOrderCanvas(orderKey, model.validPoints, model.meta, model.reg, model.isBest);
+          }
+        }
+      }
+
+      function setupInteractions() {
+        // Preset buttons
+        dom.presetBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            loadPreset(btn.dataset.preset);
+          });
+        });
+
+        // Reactant Coefficient 'a' in [ a ] A -> B
+        dom.stoichCoeffInput.addEventListener('input', function (e) {
+          const val = parseFloat(e.target.value);
+          if (Number.isFinite(val) && val > 0) {
+            state.stoichA = val;
+            state.activePreset = null;
+            resetExerciseSelection();
+            updatePresetButtonStyles();
+            updateStoichLabels();
+            recalculateAndRenderPlots();
+          }
+        });
+
+        // Show/Hide calculated transformation columns checkbox
+        if (dom.toggleCalcColsCheckbox) {
+          dom.toggleCalcColsCheckbox.checked = state.showCalcCols;
+          dom.toggleCalcColsCheckbox.addEventListener('change', function (e) {
+            toggleCalculatedColumns(e.target.checked);
+          });
+        }
+
+        // Interactive Student Exercise card selection & keyboard support
+        ['zero', 'first', 'second'].forEach(function (orderKey) {
+          const card = dom.orders[orderKey].card;
+          card.addEventListener('click', function () {
+            handleSelectOrderModel(orderKey);
+          });
+          card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleSelectOrderModel(orderKey);
+            }
+          });
+        });
+
+        if (dom.quizResetBtn) {
+          dom.quizResetBtn.addEventListener('click', function () {
+            resetExerciseSelection();
+            recalculateAndRenderPlots();
+          });
+        }
+
+        if (dom.quizRevealBtn) {
+          dom.quizRevealBtn.addEventListener('click', function () {
+            handleRevealAnswer();
+          });
+        }
+
+        // + Add Row button
+        dom.addRowBtn.addEventListener('click', function () {
+          state.activePreset = null;
+          updatePresetButtonStyles();
+          const newId = state.nextId++;
+          state.rows.push({ id: newId, t: '', a: '' });
+          renderTable();
+
+          const newInput = dom.tableBody.querySelector('input[data-field="t"][data-id="' + newId + '"]');
+          if (newInput) newInput.focus();
+        });
+
+        // Clear Table button
+        dom.clearTableBtn.addEventListener('click', function () {
+          clearTable();
+        });
+
+        // Table live typing (`input` event): update calculated columns & plots without overwriting active input
+        dom.tableBody.addEventListener('input', function (e) {
+          const target = e.target;
+          if (!target.matches('input.cell-input')) return;
+
+          const id = Number(target.dataset.id);
+          const field = target.dataset.field;
+          const row = state.rows.find(function (r) {
+            return r.id === id;
+          });
+          if (!row) return;
+
+          row[field] = target.value;
+
+          if (state.activePreset !== null) {
+            state.activePreset = null;
+            updatePresetButtonStyles();
+          }
+
+          resetExerciseSelection();
+          updateRowCalculatedCells(row);
+          recalculateAndRenderPlots();
+        });
+
+        // Table `blur` event (capturing): cleanly format valid numbers according to selected Number Format
+        dom.tableBody.addEventListener(
+          'blur',
+          function (e) {
+            const target = e.target;
+            if (!target.matches('input.cell-input')) return;
+
+            const id = Number(target.dataset.id);
+            const field = target.dataset.field;
+            const row = state.rows.find(function (r) {
+              return r.id === id;
+            });
+            if (!row) return;
+
+            const parsed = parseScientificNumber(target.value);
+            if (parsed !== null) {
+              const formatted = formatNumber(parsed);
+              row[field] = formatted;
+              target.value = formatted;
+              updateRowCalculatedCells(row);
+            }
+          },
+          true
+        );
+
+        // Table `keydown` event: Enter on last row's concentration input appends and focuses a new row
+        dom.tableBody.addEventListener('keydown', function (e) {
+          if (e.key !== 'Enter') return;
+          const target = e.target;
+          if (!target.matches('input.cell-input')) return;
+
+          e.preventDefault();
+          const id = Number(target.dataset.id);
+          const field = target.dataset.field;
+          const rowIdx = state.rows.findIndex(function (r) {
+            return r.id === id;
+          });
+          if (rowIdx === -1) return;
+
+          if (field === 't') {
+            const concInput = dom.tableBody.querySelector('input[data-field="a"][data-id="' + id + '"]');
+            if (concInput) concInput.focus();
+          } else if (field === 'a') {
+            if (rowIdx === state.rows.length - 1) {
+              const newId = state.nextId++;
+              state.rows.push({ id: newId, t: '', a: '' });
+              renderTable();
+              const nextTimeInput = dom.tableBody.querySelector(
+                'input[data-field="t"][data-id="' + newId + '"]'
+              );
+              if (nextTimeInput) nextTimeInput.focus();
+            } else {
+              const nextRow = state.rows[rowIdx + 1];
+              const nextTimeInput = dom.tableBody.querySelector(
+                'input[data-field="t"][data-id="' + nextRow.id + '"]'
+              );
+              if (nextTimeInput) nextTimeInput.focus();
+            }
+          }
+        });
+
+        // Table `paste` event: support multi-row paste from Excel / Google Sheets / CSV
+        dom.tableBody.addEventListener('paste', function (e) {
+          const target = e.target;
+          if (!target.matches('input.cell-input')) return;
+
+          const clip = e.clipboardData || window.clipboardData;
+          const text = clip ? clip.getData('text') : '';
+          if (!text) return;
+
+          const lines = text
+            .split(/\r?\n/)
+            .map(function (l) {
+              return l.trim();
+            })
+            .filter(function (l) {
+              return l.length > 0;
+            });
+
+          const hasMultiLines = lines.length > 1;
+          const hasDelimiter = lines.length === 1 && /[\t;]/.test(lines[0]);
+          if (!hasMultiLines && !hasDelimiter) return;
+
+          e.preventDefault();
+          const startId = Number(target.dataset.id);
+          let startIdx = state.rows.findIndex(function (r) {
+            return r.id === startId;
+          });
+          if (startIdx < 0) startIdx = 0;
+
+          lines.forEach(function (line, offset) {
+            const cols = line
+              .split(/[\t;]+|,(?=\s*[+-]?(?:\d|\.\d))/)
+              .map(function (c) {
+                return c.trim();
+              });
+            if (cols.length >= 2) {
+              const pT = parseScientificNumber(cols[0]);
+              const pA = parseScientificNumber(cols[1]);
+              const formattedT = pT !== null ? formatNumber(pT) : cols[0];
+              const formattedA = pA !== null ? formatNumber(pA) : cols[1];
+
+              const targetIdx = startIdx + offset;
+              if (targetIdx < state.rows.length) {
+                state.rows[targetIdx].t = formattedT;
+                state.rows[targetIdx].a = formattedA;
+              } else {
+                state.rows.push({
+                  id: state.nextId++,
+                  t: formattedT,
+                  a: formattedA,
+                });
+              }
+            }
+          });
+
+          state.activePreset = null;
+          resetExerciseSelection();
+          updatePresetButtonStyles();
+          renderTable();
+          recalculateAndRenderPlots();
+        });
+
+        // Table delete row button delegation
+        dom.tableBody.addEventListener('click', function (e) {
+          const delBtn = e.target.closest('button[data-delete-id]');
+          if (!delBtn) return;
+
+          const id = Number(delBtn.dataset.deleteId);
+          state.rows = state.rows.filter(function (r) {
+            return r.id !== id;
+          });
+
+          if (state.rows.length === 0) {
+            state.rows.push({ id: state.nextId++, t: '', a: '' });
+          }
+
+          state.activePreset = null;
+          resetExerciseSelection();
+          updatePresetButtonStyles();
+          renderTable();
+          recalculateAndRenderPlots();
+        });
+
+        // Canvas hover & touch tooltips
+        ['zero', 'first', 'second'].forEach(function (orderKey) {
+          const canvas = dom.orders[orderKey].canvas;
+
+          canvas.addEventListener('mousemove', function (e) {
+            handlePlotPointerMove(orderKey, e.clientX, e.clientY);
+          });
+
+          canvas.addEventListener('mouseleave', function () {
+            handlePlotPointerLeave(orderKey);
+          });
+
+          canvas.addEventListener(
+            'touchstart',
+            function (e) {
+              if (e.touches && e.touches.length > 0) {
+                handlePlotPointerMove(orderKey, e.touches[0].clientX, e.touches[0].clientY);
+              }
+            },
+            { passive: true }
+          );
+
+          canvas.addEventListener(
+            'touchmove',
+            function (e) {
+              if (e.touches && e.touches.length > 0) {
+                handlePlotPointerMove(orderKey, e.touches[0].clientX, e.touches[0].clientY);
+              }
+            },
+            { passive: true }
+          );
+
+          canvas.addEventListener('touchend', function () {
+            setTimeout(function () {
+              handlePlotPointerLeave(orderKey);
+            }, 1400);
+          });
+        });
+
+        // ResizeObserver for crisp responsive canvas redraws
+        if (typeof ResizeObserver !== 'undefined') {
+          const observer = new ResizeObserver(function () {
+            ['zero', 'first', 'second'].forEach(function (orderKey) {
+              const model = state.plotModels[orderKey];
+              if (model) {
+                renderOrderCanvas(orderKey, model.validPoints, model.meta, model.reg, model.isBest);
+              }
+            });
+          });
+          observer.observe(dom.orders.zero.container);
+          observer.observe(dom.orders.first.container);
+          observer.observe(dom.orders.second.container);
+        } else {
+          window.addEventListener('resize', recalculateAndRenderPlots);
+        }
+      }
+
+      // =========================================================================
+      // 6. INITIALIZATION ON DOMContentLoaded
+      // =========================================================================
+
+      function init() {
+        dom = getElements();
+        setupInteractions();
+        loadPreset('example1');
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
