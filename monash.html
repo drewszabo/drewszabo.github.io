@@ -166,7 +166,7 @@
           </div>
 
           <span class="inline-flex items-center px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-600 text-[11px] font-medium">
-            Units: <strong class="font-mono text-slate-800 mx-1">s</strong> &amp; <strong class="font-mono text-slate-800 ml-1">M</strong>
+            Units: <strong class="font-mono text-slate-800 mx-1">s</strong> &amp; <strong class="font-mono text-slate-800 ml-1">mol dm&#8315;&#179;</strong>
           </span>
         </div>
       </div>
@@ -230,9 +230,7 @@
             Show calculated transformation columns (<code class="font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">ln[A]</code> and <code class="font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">1/[A]</code>)
           </span>
         </label>
-        <span class="text-[11px] text-slate-400">
-          Hidden by default so students can focus on raw <span class="font-mono text-slate-600">(t, [A])</span> measurements
-        </span>
+
       </div>
 
       <!-- Responsive HTML Table -->
@@ -245,14 +243,14 @@
                 Time, <span class="lowercase font-bold text-slate-800">t</span> (<span class="normal-case">s</span>)
               </th>
               <th class="py-3 px-3 min-w-[165px]">
-                Conc., <span class="normal-case font-bold text-slate-800">[A]</span> (<span class="normal-case">M</span>)
+                Conc., <span class="normal-case font-bold text-slate-800">[A]</span> (<span class="normal-case">mol dm&#8315;&#179;</span>)
               </th>
               <th id="th-ln" class="hidden py-3 px-3 min-w-[135px] bg-indigo-50/40">
                 <span class="normal-case font-bold text-indigo-700">ln[A]</span>
                 <span class="block text-[10px] font-normal text-slate-400 normal-case">1st Order Y</span>
               </th>
               <th id="th-inv" class="hidden py-3 px-3 min-w-[150px] bg-indigo-50/40">
-                <span class="normal-case font-bold text-indigo-700">1/[A]</span> (<span class="normal-case">M&#8315;&#185;</span>)
+                <span class="normal-case font-bold text-indigo-700">1/[A]</span> (<span class="normal-case">mol&#8315;&#185; dm&#179;</span>)
                 <span class="block text-[10px] font-normal text-slate-400 normal-case">2nd Order Y</span>
               </th>
               <th class="py-3 px-3 w-16 text-center rounded-tr-lg">Action</th>
@@ -271,9 +269,9 @@
         <div class="flex items-start sm:items-center gap-2.5">
           <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold shrink-0 mt-0.5 sm:mt-0">3</span>
           <div>
-            <h2 class="text-sm sm:text-base font-semibold text-slate-900">Evaluate the Reaction Order (Interactive Exercise)</h2>
+            <h2 class="text-sm sm:text-base font-semibold text-slate-900">Evaluate the Reaction Order</h2>
             <p class="text-xs text-slate-500 mt-0.5">
-              Which reaction order fits best? <strong class="text-slate-700">Click or tap the graph card below</strong> that forms the straightest line (<span class="font-mono">R&sup2;</span> closest to <span class="font-mono">1.0000</span>).
+              <strong class="text-slate-700">Click or tap </strong>the reaction order that fits best.
             </p>
           </div>
         </div>
@@ -349,14 +347,14 @@
                 <div id="eq-zero" class="text-xs sm:text-sm font-mono font-semibold text-slate-900 mt-0.5 break-all">&mdash;</div>
               </div>
 
-              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
-                <div>
+              <div class="grid grid-cols-[auto_1fr] items-start gap-3 pt-2 border-t border-slate-100">
+                <div class="whitespace-nowrap">
                   <div class="text-[10px] font-semibold text-slate-400 uppercase">Determination</div>
-                  <div id="r2-zero" class="text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5">R&sup2; = &mdash;</div>
+                  <div id="r2-zero" class="text-xs xl:text-sm font-mono font-bold text-slate-800 mt-0.5 whitespace-nowrap">R&sup2; = &mdash;</div>
                 </div>
-                <div>
-                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Rate Constant (<span class="italic lowercase">k</span>)</div>
-                  <div id="k-zero" class="text-xs sm:text-sm font-mono font-bold text-indigo-700 mt-0.5">&mdash;</div>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase whitespace-nowrap">Rate Constant (<span class="italic lowercase">k</span>)</div>
+                  <div id="k-zero" class="text-xs xl:text-sm font-mono font-bold text-indigo-700 mt-0.5 whitespace-nowrap">&mdash;</div>
                 </div>
               </div>
 
@@ -412,14 +410,14 @@
                 <div id="eq-first" class="text-xs sm:text-sm font-mono font-semibold text-slate-900 mt-0.5 break-all">&mdash;</div>
               </div>
 
-              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
-                <div>
+              <div class="grid grid-cols-[auto_1fr] items-start gap-3 pt-2 border-t border-slate-100">
+                <div class="whitespace-nowrap">
                   <div class="text-[10px] font-semibold text-slate-400 uppercase">Determination</div>
-                  <div id="r2-first" class="text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5">R&sup2; = &mdash;</div>
+                  <div id="r2-first" class="text-xs xl:text-sm font-mono font-bold text-slate-800 mt-0.5 whitespace-nowrap">R&sup2; = &mdash;</div>
                 </div>
-                <div>
-                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Rate Constant (<span class="italic lowercase">k</span>)</div>
-                  <div id="k-first" class="text-xs sm:text-sm font-mono font-bold text-indigo-700 mt-0.5">&mdash;</div>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase whitespace-nowrap">Rate Constant (<span class="italic lowercase">k</span>)</div>
+                  <div id="k-first" class="text-xs xl:text-sm font-mono font-bold text-indigo-700 mt-0.5 whitespace-nowrap">&mdash;</div>
                 </div>
               </div>
 
@@ -475,14 +473,14 @@
                 <div id="eq-second" class="text-xs sm:text-sm font-mono font-semibold text-slate-900 mt-0.5 break-all">&mdash;</div>
               </div>
 
-              <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100">
-                <div>
+              <div class="grid grid-cols-[auto_1fr] items-start gap-3 pt-2 border-t border-slate-100">
+                <div class="whitespace-nowrap">
                   <div class="text-[10px] font-semibold text-slate-400 uppercase">Determination</div>
-                  <div id="r2-second" class="text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5">R&sup2; = &mdash;</div>
+                  <div id="r2-second" class="text-xs xl:text-sm font-mono font-bold text-slate-800 mt-0.5 whitespace-nowrap">R&sup2; = &mdash;</div>
                 </div>
-                <div>
-                  <div class="text-[10px] font-semibold text-slate-400 uppercase">Rate Constant (<span class="italic lowercase">k</span>)</div>
-                  <div id="k-second" class="text-xs sm:text-sm font-mono font-bold text-indigo-700 mt-0.5">&mdash;</div>
+                <div class="min-w-0">
+                  <div class="text-[10px] font-semibold text-slate-400 uppercase whitespace-nowrap">Rate Constant (<span class="italic lowercase">k</span>)</div>
+                  <div id="k-second" class="text-xs xl:text-sm font-mono font-bold text-indigo-700 mt-0.5 whitespace-nowrap">&mdash;</div>
                 </div>
               </div>
 
@@ -508,7 +506,7 @@
       // =========================================================================
       // How to customize each preset for your lecture/class:
       //   - stoichA : Reactant stoichiometric coefficient 'a' in [a] A -> B (e.g. 1 or 2)
-      //   - rows    : Array of { t: 'time_in_s', a: 'conc_in_M' } data points.
+      //   - rows    : Array of { t: 'time_in_s', a: 'conc_in_mol_dm-3' } data points.
       //               Both standard decimals ('0.500') and scientific notation
       //               ('1.20e-2' or '1.2*10^-2') are supported.
       // =========================================================================
@@ -1164,9 +1162,9 @@
             ys: validPoints.map(function (p) {
               return p.a;
             }),
-            yLabel: '[A] (M)',
+            yLabel: '[A] (mol dm\u207b\u00b3)',
             ySymbol: '[A]',
-            kUnit: 'M\u00b7s\u207b\u00b9',
+            kUnit: 'mol dm\u207b\u00b3 s\u207b\u00b9',
           },
           first: {
             ys: validPoints.map(function (p) {
@@ -1180,9 +1178,9 @@
             ys: validPoints.map(function (p) {
               return p.invA;
             }),
-            yLabel: '1/[A] (M\u207b\u00b9)',
+            yLabel: '1/[A] (mol\u207b\u00b9 dm\u00b3)',
             ySymbol: '1/[A]',
-            kUnit: 'M\u207b\u00b9\u00b7s\u207b\u00b9',
+            kUnit: 'mol\u207b\u00b9 dm\u00b3 s\u207b\u00b9',
           },
         };
 
@@ -1370,7 +1368,7 @@
         if (!reg || validPoints.length < 2) {
           ui.eq.textContent = 'Awaiting \u2265 2 valid points';
           ui.r2.innerHTML = 'R&sup2; = &mdash;';
-          ui.r2.className = 'text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5';
+          ui.r2.className = 'text-xs xl:text-sm font-mono font-bold text-slate-800 mt-0.5 whitespace-nowrap';
           ui.k.textContent = '\u2014';
           ui.kobs.textContent = '\u2014';
           ui.kobsRow.classList.toggle('hidden', !showKobs);
@@ -1385,11 +1383,11 @@
         ui.r2.innerHTML = 'R&sup2; = ' + reg.r2.toFixed(4);
 
         if (isBest) {
-          ui.r2.className = 'text-xs sm:text-sm font-mono font-bold text-emerald-700 mt-0.5';
+          ui.r2.className = 'text-xs xl:text-sm font-mono font-bold text-emerald-700 mt-0.5 whitespace-nowrap';
         } else if (isWrong) {
-          ui.r2.className = 'text-xs sm:text-sm font-mono font-bold text-rose-700 mt-0.5';
+          ui.r2.className = 'text-xs xl:text-sm font-mono font-bold text-rose-700 mt-0.5 whitespace-nowrap';
         } else {
-          ui.r2.className = 'text-xs sm:text-sm font-mono font-bold text-slate-800 mt-0.5';
+          ui.r2.className = 'text-xs xl:text-sm font-mono font-bold text-slate-800 mt-0.5 whitespace-nowrap';
         }
 
         const kObs = Math.abs(reg.slope);
