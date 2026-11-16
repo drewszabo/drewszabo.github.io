@@ -240,10 +240,10 @@
             <tr class="border-b-2 border-slate-200 bg-slate-50/90 text-xs font-semibold uppercase tracking-wider text-slate-600">
               <th class="py-3 px-3 w-12 text-center rounded-tl-lg">#</th>
               <th class="py-3 px-3 min-w-[140px]">
-                Time, <span class="lowercase font-bold text-slate-800">t</span> (<span class="normal-case">s</span>)
+                Time, <span class="lowercase font-bold text-slate-800">t</span> /<span class="normal-case">s</span>
               </th>
               <th class="py-3 px-3 min-w-[165px]">
-                Conc., <span class="normal-case font-bold text-slate-800">[A]</span> (<span class="normal-case">mol dm&#8315;&#179;</span>)
+                Concentration, <span class="normal-case font-bold text-slate-800">[A]</span> / <span class="normal-case">mol dm&#8315;&#179;</span>
               </th>
               <th id="th-ln" class="hidden py-3 px-3 min-w-[135px] bg-indigo-50/40">
                 <span class="normal-case font-bold text-indigo-700">ln[A]</span>
@@ -1162,7 +1162,7 @@
             ys: validPoints.map(function (p) {
               return p.a;
             }),
-            yLabel: '[A] (mol dm\u207b\u00b3)',
+            yLabel: 'Concentration, [A] / mol dm\u207b\u00b3',
             ySymbol: '[A]',
             kUnit: 'mol dm\u207b\u00b3 s\u207b\u00b9',
           },
@@ -1170,7 +1170,7 @@
             ys: validPoints.map(function (p) {
               return p.lnA;
             }),
-            yLabel: 'ln[A]',
+            yLabel: 'Concentration,ln[A]',
             ySymbol: 'ln[A]',
             kUnit: 's\u207b\u00b9',
           },
@@ -1178,7 +1178,7 @@
             ys: validPoints.map(function (p) {
               return p.invA;
             }),
-            yLabel: '1/[A] (mol\u207b\u00b9 dm\u00b3)',
+            yLabel: 'Concentration, 1/[A] / mol\u207b\u00b9 dm\u00b3',
             ySymbol: '1/[A]',
             kUnit: 'mol\u207b\u00b9 dm\u00b3 s\u207b\u00b9',
           },
@@ -1517,7 +1517,7 @@
 
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
-        ctx.fillText('Time, t (s)', pad.left + plotW / 2, height - 4);
+        ctx.fillText('Time, t / s', pad.left + plotW / 2, height - 4);
 
         ctx.save();
         ctx.translate(14, pad.top + plotH / 2);
