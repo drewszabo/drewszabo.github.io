@@ -87,13 +87,6 @@
           <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1">Examples:</span>
           <button
             type="button"
-            data-preset="example1"
-            class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 transition-colors cursor-pointer"
-          >
-            Example 1
-          </button>
-          <button
-            type="button"
             data-preset="example2"
             class="preset-btn px-3 py-1.5 text-xs font-medium rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 hover:border-indigo-300 transition-colors cursor-pointer"
           >
@@ -512,44 +505,30 @@
       // =========================================================================
 
       const PRESETS = {
-        // --- EXAMPLE 1 (Default: 0th-order kinetics, a = 1) ---
-        example1: {
+        // --- EXAMPLE 2 (Default: 0th-order kinetics, a = 1) ---
+        example2: {
           stoichA: 1,
           rows: [
-            { t: '0', a: '0.500' },
-            { t: '10', a: '0.420' },
-            { t: '20', a: '0.340' },
-            { t: '30', a: '0.260' },
-            { t: '40', a: '0.180' },
-            { t: '50', a: '0.100' },
+            { t: '0', a: '0.1' },
+            { t: '230', a: '0.085' },
+            { t: '720', a: '0.065' },
+            { t: '1440', a: '0.048' },
+            { t: '2370', a: '0.036' },
           ],
         },
 
-        // --- EXAMPLE 2 (Default: 0th-order kinetics with stoichiometry a = 2) ---
-        example2: {
+        // --- EXAMPLE 3 (Default: 0th-order kinetics with stoichiometry a = 2) ---
+        example3: {
           stoichA: 2,
           rows: [
-            { t: '0', a: '1.20e-2' },
-            { t: '20', a: '1.00e-2' },
-            { t: '40', a: '8.00e-3' },
-            { t: '60', a: '6.00e-3' },
-            { t: '80', a: '4.00e-3' },
-            { t: '100', a: '2.00e-3' },
+            { t: '20', a: '0.078' },
+            { t: '40', a: '0.066' },
+            { t: '60', a: '0.054' },
+            { t: '80', a: '0.042' },
+            { t: '100', a: '0.030' },
           ],
         },
 
-        // --- EXAMPLE 3 (Default: 1st-order kinetics, a = 1) ---
-        example3: {
-          stoichA: 1,
-          rows: [
-            { t: '0', a: '2.40e-2' },
-            { t: '50', a: '1.63e-2' },
-            { t: '100', a: '1.11e-2' },
-            { t: '150', a: '7.52e-3' },
-            { t: '200', a: '5.11e-3' },
-            { t: '250', a: '3.47e-3' },
-          ],
-        },
 
         // --- EXAMPLE 4 (Default: 2nd-order kinetics, a = 1) ---
         example4: {
@@ -579,7 +558,7 @@
         trueBestOrder: null,
         latestRegressions: null,
         latestValidCount: 0,
-        activePreset: 'example1',
+        activePreset: 'example2',
         plotModels: { zero: null, first: null, second: null },
         hoveredIndex: { zero: -1, first: -1, second: -1 },
       };
@@ -1979,7 +1958,7 @@
       function init() {
         dom = getElements();
         setupInteractions();
-        loadPreset('example1');
+        loadPreset('example2');
       }
 
       if (document.readyState === 'loading') {
